@@ -1,7 +1,6 @@
 import type { IsAny } from './IsAny';
 import type { IsUnion } from './IsUnion';
-
-type __ValueType = number | boolean | string | null | undefined | symbol | bigint | Date;
+import type { ValueType } from './ValueType';
 
 type __DeepStrictObjectKeys<
   T extends object,
@@ -18,7 +17,7 @@ type __DeepStrictObjectKeys<
     ? P
     : T[P] extends Array<infer Element extends object>
       ? P | `${P}${Joiner['array']}${Joiner['object']}${__DeepStrictObjectKeys<Element, Joiner>}`
-      : T[P] extends __ValueType
+      : T[P] extends ValueType
         ? P
         : IsAny<T[P]> extends true
           ? P
