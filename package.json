@@ -12,7 +12,7 @@
   "main": "bin/src/index.js",
   "types": "bin/src/index.d.ts",
   "scripts": {
-    "build": "rimraf dist && tsc",
+    "build": "rimraf bin && tsc",
     "build:test": "rimraf bin && tsc -p test/tsconfig.json --watch",
     "prepare": "ts-patch install && typia patch",
     "test": "node bin/test/index.js",
