@@ -1,40 +1,36 @@
-import type { DeepStrictObjectKeys } from "./DeepStrictObjectKeys";
-import type { DeepStrictOmit } from "./DeepStrictOmit";
-import type { DeepStrictUnbrand } from "./DeepStrictUnbrand";
-import type { ElementOf } from "./ElementOf";
+import type { DeepStrictObjectKeys } from './DeepStrictObjectKeys';
+import type { DeepStrictOmit } from './DeepStrictOmit';
+import type { DeepStrictUnbrand } from './DeepStrictUnbrand';
+import type { ElementOf } from './ElementOf';
 
-type RemoveLastProperty<S extends string> =
-    S extends `${infer First}.${infer Last}`
-        ? First extends `${infer ObjectPart}[*]`
-            ? ObjectPart | `${First}.${RemoveLastProperty<Last>}`
-            : `${First}` | `${First}.${RemoveLastProperty<Last>}`
-        : never;
+type RemoveLastProperty<S extends string> = S extends `${infer First}.${infer Last}`
+  ? First extends `${infer ObjectPart}[*]`
+    ? ObjectPart | `${First}.${RemoveLastProperty<Last>}`
+    : `${First}` | `${First}.${RemoveLastProperty<Last>}`
+  : never;
 
-type RemoveAfterDot<
-    T extends object,
-    K extends string
-> = K extends `${infer First}.${infer Last}`
-    ? First extends keyof T
-        ? T[First] extends Array<any>
-            ? `${First}[*].${string}`
-            : T[First] extends object
-            ? `${First}.${RemoveAfterDot<T[First], Last>}`
-            : never
-        : First extends "[*]"
-        ? T extends Array<any>
-            ? RemoveAfterDot<ElementOf<T>, Last>
-            : never
-        : First extends `${infer Second extends string}[*]`
-        ? Second extends keyof T
-            ? T[Second] extends object
-                ? RemoveAfterDot<T[Second], Last>
-                : never
-            : never
+type RemoveAfterDot<T extends object, K extends string> = K extends `${infer First}.${infer Last}`
+  ? First extends keyof T
+    ? T[First] extends Array<any>
+      ? `${First}[*].${string}`
+      : T[First] extends object
+        ? `${First}.${RemoveAfterDot<T[First], Last>}`
         : never
-    : K extends keyof T
+    : First extends '[*]'
+      ? T extends Array<any>
+        ? RemoveAfterDot<ElementOf<T>, Last>
+        : never
+      : First extends `${infer Second extends string}[*]`
+        ? Second extends keyof T
+          ? T[Second] extends object
+            ? RemoveAfterDot<T[Second], Last>
+            : never
+          : never
+        : never
+  : K extends keyof T
     ? T[K] extends Array<any>
-        ? `${K}[*].${string}`
-        : `${K}.${string}`
+      ? `${K}[*].${string}`
+      : `${K}.${string}`
     : never;
 
 /**
@@ -47,13 +43,10 @@ type RemoveAfterDot<
  * type Example3 = DeepStrictPick<{ a: 1 }[], "[*].a">;
  * ```
  */
-export type DeepStrictPick<
-    T extends object,
-    K extends DeepStrictObjectKeys<T>
-> = DeepStrictOmit<
-    T,
-    Exclude<
-        DeepStrictObjectKeys<DeepStrictUnbrand<T>>,
-        K | RemoveLastProperty<K> | RemoveAfterDot<DeepStrictUnbrand<T>, K>
-    >
+export type DeepStrictPick<T extends object, K extends DeepStrictObjectKeys<T>> = DeepStrictOmit<
+  T,
+  Exclude<
+    DeepStrictObjectKeys<DeepStrictUnbrand<T>>,
+    K | RemoveLastProperty<K> | RemoveAfterDot<DeepStrictUnbrand<T>, K>
+  >
 >;

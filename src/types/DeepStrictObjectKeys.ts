@@ -1,15 +1,7 @@
-import type { IsAny } from "./IsAny";
-import type { IsUnion } from "./IsUnion";
+import type { IsAny } from './IsAny';
+import type { IsUnion } from './IsUnion';
 
-type __ValueType =
-  | number
-  | boolean
-  | string
-  | null
-  | undefined
-  | symbol
-  | bigint
-  | Date;
+type __ValueType = number | boolean | string | null | undefined | symbol | bigint | Date;
 
 type __DeepStrictObjectKeys<
   T extends object,
@@ -17,33 +9,26 @@ type __DeepStrictObjectKeys<
     array: string;
     object: string;
   } = {
-    array: "[*]";
-    object: ".";
+    array: '[*]';
+    object: '.';
   },
-  P extends keyof T = keyof T
+  P extends keyof T = keyof T,
 > = P extends string
   ? IsUnion<T[P]> extends true
     ? P
     : T[P] extends Array<infer Element extends object>
-    ?
-        | P
-        | `${P}${Joiner["array"]}${Joiner["object"]}${__DeepStrictObjectKeys<
-            Element,
-            Joiner
-          >}`
-    : T[P] extends __ValueType
-    ? P
-    : IsAny<T[P]> extends true
-    ? P
-    : T[P] extends object
-    ? T[P] extends Array<infer _Element>
-      ? P
-      : T[P] extends Record<string, never>
-      ? `${P}`
-      :
-          | `${P}`
-          | `${P}${Joiner["object"]}${__DeepStrictObjectKeys<T[P], Joiner>}`
-    : never
+      ? P | `${P}${Joiner['array']}${Joiner['object']}${__DeepStrictObjectKeys<Element, Joiner>}`
+      : T[P] extends __ValueType
+        ? P
+        : IsAny<T[P]> extends true
+          ? P
+          : T[P] extends object
+            ? T[P] extends Array<infer _Element>
+              ? P
+              : T[P] extends Record<string, never>
+                ? `${P}`
+                : `${P}` | `${P}${Joiner['object']}${__DeepStrictObjectKeys<T[P], Joiner>}`
+            : never
   : never;
 
 /**
@@ -60,14 +45,13 @@ type __DeepStrictObjectKeys<
 export type DeepStrictObjectKeys<
   T extends object,
   Joiner extends { array: string; object: string } = {
-    array: "[*]";
-    object: ".";
+    array: '[*]';
+    object: '.';
   },
-  P extends keyof T = keyof T
-> = T extends Array<infer Element>
-  ? Element extends object
-    ? `${Joiner["array"]}.${DeepStrictObjectKeys<Element, Joiner>}`
-    : `${Joiner["array"]}.${keyof Element extends string
-        ? keyof Element
-        : never}`
-  : __DeepStrictObjectKeys<T, Joiner, P>;
+  P extends keyof T = keyof T,
+> =
+  T extends Array<infer Element>
+    ? Element extends object
+      ? `${Joiner['array']}.${DeepStrictObjectKeys<Element, Joiner>}`
+      : `${Joiner['array']}.${keyof Element extends string ? keyof Element : never}`
+    : __DeepStrictObjectKeys<T, Joiner, P>;

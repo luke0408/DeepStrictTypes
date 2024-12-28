@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths:
-      - 'src/**'
-      - 'package.json'
+      - "src/**"
+      - "package.json"
 
 jobs:
   update_version:
