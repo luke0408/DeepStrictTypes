@@ -36,8 +36,8 @@ jobs:
 
       - name: Configure git
         run: |
-          git config --local user.email "actions@example.com"
-          git config --local user.name "GitHub Actions"
+          git config --local user.email "kscodebase@gmail.com"
+          git config --local user.name "kakasoo"
 
       - name: Authenticate to NPM registry
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
@@ -52,4 +52,4 @@ jobs:
         run: |
           git push --set-upstream origin main --follow-tags
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
