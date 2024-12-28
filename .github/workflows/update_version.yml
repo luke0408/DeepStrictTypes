@@ -23,9 +23,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: build
-        run: npm run build
-
       - name: Authenticate to NPM registry
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
@@ -38,6 +35,9 @@ jobs:
         run: |
           git config --local user.email "kscodebase@gmail.com"
           git config --local user.name "kakasoo"
+
+      - name: build
+        run: npm run build
 
       - name: Bump version
         run: npm version patch
