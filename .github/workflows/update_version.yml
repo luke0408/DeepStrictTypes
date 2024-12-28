@@ -34,16 +34,16 @@ jobs:
           git reset --hard
           git clean -fd
 
+      - name: Configure git
+        run: |
+          git config --local user.email "kscodebase@gmail.com"
+          git config --local user.name "kakasoo"
+
       - name: Bump version
         run: npm version patch
 
       - name: Publish to NPM
         run: npm publish
-
-      - name: Configure git
-        run: |
-          git config --local user.email "actions@example.com"
-          git config --local user.name "GitHub Actions"
 
       - name: Push changes to repository
         run: |
