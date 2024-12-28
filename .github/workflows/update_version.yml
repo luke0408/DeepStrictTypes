@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths:
-      - "src/**"
-      - "package.json"
+      - 'src/**'
+      - 'package.json'
 
 jobs:
   update_version:
@@ -52,4 +52,4 @@ jobs:
         run: |
           git push --set-upstream origin main --follow-tags
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
