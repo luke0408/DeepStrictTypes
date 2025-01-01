@@ -1,3 +1,4 @@
+export * from './DeepStrictAssert';
 export * from './types/DeepDateToString';
 export * from './types/DeepStrictObjectKeys';
 export * from './types/DeepStrictOmit';
