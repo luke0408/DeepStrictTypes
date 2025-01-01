@@ -13,4 +13,5 @@ export * from './types/IsUnion';
 export * from './types/RemoveAfterDot';
 export * from './types/RemoveArraySymbol';
 export * from './types/RemoveLastProperty';
+export * from './types/StringToDeepObject';
 export * from './types/ValueType';
