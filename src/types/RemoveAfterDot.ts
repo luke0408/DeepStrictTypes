@@ -14,7 +14,7 @@ export type RemoveAfterDot<T extends object, K extends string> = K extends `${in
       : First extends `${infer Second extends string}[*]`
         ? Second extends keyof T
           ? T[Second] extends object
-            ? RemoveAfterDot<T[Second], Last>
+            ? `${First}.${RemoveAfterDot<T[Second], Last>}`
             : never
           : never
         : never
@@ -22,4 +22,6 @@ export type RemoveAfterDot<T extends object, K extends string> = K extends `${in
     ? T[K] extends Array<any>
       ? `${K}[*].${string}`
       : `${K}.${string}`
-    : never;
+    : T extends Array<any>
+      ? RemoveAfterDot<ElementOf<T>, K>
+      : never;
