@@ -6,10 +6,8 @@ export const deepStrictAssert =
   <K extends DeepStrictObjectKeys<T>>(key: K): DeepStrictPick<T, K> => {
     const keys = key.split(/(?:\[\*\])?\./g).filter(Boolean);
 
-    console.log(keys);
     const traverse = (input: Record<string, any> | Record<string, any>[], keys: string[]): any => {
       const [first, ...rest] = keys;
-      console.log(first);
 
       if (input instanceof Array) {
         const elements = input.map((element) => {
