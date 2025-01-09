@@ -2,31 +2,29 @@ import type { DeepStrictObjectKeys } from './DeepStrictObjectKeys';
 import type { DeepStrictUnbrand } from './DeepStrictUnbrand';
 import type { GetElementMember } from './GetMember';
 
-type __DeepStrictOmit<T extends object, K extends DeepStrictObjectKeys<T>> = {
-  [key in keyof T as key extends K ? never : key]: T[key] extends Array<infer Element extends object>
-    ? key extends string
-      ? Element extends Date
-        ? Array<Element>
-        : Array<
-            __DeepStrictOmit<
-              Element,
-              GetElementMember<K, key> extends DeepStrictObjectKeys<Element> ? GetElementMember<K, key> : never
-            >
-          >
-      : never
-    : T[key] extends Array<infer Element>
-      ? Array<Element>
-      : T[key] extends object
+export type ____DeepStrictOmit<T extends object, K extends DeepStrictObjectKeys<T>> = [K] extends [never]
+  ? T
+  : {
+      [key in keyof T as key extends K ? never : key]: T[key] extends Array<infer Element extends object>
         ? key extends string
-          ? T[key] extends Date
-            ? T[key]
-            : __DeepStrictOmit<
-                T[key],
-                GetElementMember<K, key> extends DeepStrictObjectKeys<T[key]> ? GetElementMember<K, key> : never
-              >
+          ? Element extends Date
+            ? Array<Element>
+            : GetElementMember<K, key> extends DeepStrictObjectKeys<Element>
+              ? Array<____DeepStrictOmit<Element, GetElementMember<K, key>>>
+              : Array<Element>
           : never
-        : T[key];
-};
+        : T[key] extends Array<infer Element>
+          ? Array<Element>
+          : T[key] extends object
+            ? key extends string
+              ? T[key] extends Date
+                ? T[key]
+                : GetElementMember<K, key> extends DeepStrictObjectKeys<T[key]>
+                  ? ____DeepStrictOmit<T[key], GetElementMember<K, key>>
+                  : T[key]
+              : never
+            : T[key];
+    };
 
 export type _DeepStrictOmit<T extends object, K extends DeepStrictObjectKeys<T>> =
   T extends Array<infer Element extends object>
@@ -36,7 +34,7 @@ export type _DeepStrictOmit<T extends object, K extends DeepStrictObjectKeys<T>>
           GetElementMember<K, ''> extends DeepStrictObjectKeys<Element> ? GetElementMember<K, ''> : never
         >
       >
-    : __DeepStrictOmit<T, K>;
+    : ____DeepStrictOmit<T, K>;
 
 /**
  * @title 인터페이스에서 특정 키를 제거하는 타입.
@@ -49,6 +47,6 @@ export type _DeepStrictOmit<T extends object, K extends DeepStrictObjectKeys<T>>
  * ```
  */
 export type DeepStrictOmit<T extends object, K extends DeepStrictObjectKeys<DeepStrictUnbrand<T>>> = _DeepStrictOmit<
-  DeepStrictUnbrand<T>,
-  K
+  T,
+  Extract<K, DeepStrictObjectKeys<T>>
 >;
