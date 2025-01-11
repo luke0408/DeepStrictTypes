@@ -18,8 +18,33 @@
     "test": "node bin/test/index.js",
     "prettier": "prettier src --write && prettier test --write"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "typescript",
+    "types",
+    "utility-types",
+    "deep-types",
+    "nested-types",
+    "type-safety",
+    "type-checking",
+    "strict-types",
+    "deep-strict",
+    "deep-pick",
+    "deep-omit",
+    "deep-keys",
+    "deep-object",
+    "type-utils",
+    "type-helpers",
+    "typescript-utils",
+    "typescript-types",
+    "type-manipulation",
+    "nested-objects",
+    "object-types",
+    "array-types",
+    "type-inference",
+    "type-assertions",
+    "type-validation"
+  ],
+  "author": "kakasoo",
   "license": "ISC",
   "devDependencies": {
     "@samchon/shopping-api": "^0.12.1",
@@ -29,6 +54,10 @@
     "ts-patch": "^3.3.0",
     "typescript": "^5.7.2",
     "typia": "^7.5.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kakasoo/deepstricttypes"
   },
   "dependencies": {
     "@kakasoo/proto-typescript": "^1.28.7"
