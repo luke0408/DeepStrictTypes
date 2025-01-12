@@ -2,7 +2,7 @@ import type { DeepStrictObjectKeys } from './DeepStrictObjectKeys';
 import type { DeepStrictUnbrand } from './DeepStrictUnbrand';
 import type { GetElementMember } from './GetMember';
 
-export type ____DeepStrictOmit<T extends object, K extends DeepStrictObjectKeys<T>> = [K] extends [never]
+type ____DeepStrictOmit<T extends object, K extends DeepStrictObjectKeys<T>> = [K] extends [never]
   ? T
   : {
       [key in keyof T as key extends K ? never : key]: T[key] extends Array<infer Element extends object>
@@ -26,7 +26,7 @@ export type ____DeepStrictOmit<T extends object, K extends DeepStrictObjectKeys<
             : T[key];
     };
 
-export type _DeepStrictOmit<T extends object, K extends DeepStrictObjectKeys<T>> =
+type _DeepStrictOmit<T extends object, K extends DeepStrictObjectKeys<T>> =
   T extends Array<infer Element extends object>
     ? Array<
         _DeepStrictOmit<
