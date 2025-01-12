@@ -1,4 +1,5 @@
 # How To Use
+![example](https://github.com/user-attachments/assets/28316425-8302-453e-b238-0c732606e6a7)
 
 ```bash
 npm i @kakasoo/deep-strict-types
