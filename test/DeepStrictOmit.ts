@@ -33,13 +33,13 @@ test('TEST 1. apply DeepStrictOmit to primitive property type of branding type',
   ok(typia.random<IsAnswer>());
 });
 
-test('TEST 1. apply DeepStrictOmit to branding property type of branding type', () => {
+test('TEST 2. apply DeepStrictOmit to branding property type of branding type', () => {
   type Question = { id: string & typia.tags.Format<'uuid'>; name: string };
   type IsAnswer = Equal<DeepStrictOmit<Question, 'id'>, { name: string }>;
   ok(typia.random<IsAnswer>());
 });
 
-test('TEST 1', () => {
+test('TEST 3. Example of complex type', () => {
   type ISummary = Pick<IShoppingSale.ISummary, 'id' | 'content'>;
   type Question = DeepStrictOmit<ISummary, 'content.id'>;
   type __Answer = Omit<ISummary, 'content'> & { content: Omit<ISummary['content'], 'id'> };
@@ -48,7 +48,7 @@ test('TEST 1', () => {
   ok(typia.random<IsAnswer>());
 });
 
-test('TEST 1', () => {
+test('TEST 4. if pikced property is brnading type (typia)', () => {
   type Question = {
     id: string & typia.tags.Format<'uuid'>;
     content: { id: string & typia.tags.Format<'uuid'> };
@@ -66,7 +66,7 @@ test('TEST 1', () => {
   ok(typia.random<IsAnswer>());
 });
 
-test('TEST 1', () => {
+test('TEST 5. if one of picked property is branding type (typia)', () => {
   type Question = {
     id: string & typia.tags.Format<'uuid'>;
     content: { id: string & typia.tags.Format<'uuid'> };
@@ -83,7 +83,7 @@ test('TEST 1', () => {
   ok(typia.random<IsAnswer>());
 });
 
-test('TEST 1', () => {
+test('TEST 6. if one of picked property is nested key type and branding type (typia)', () => {
   type Question = {
     id: string & typia.tags.Format<'uuid'>;
     content: { id: string & typia.tags.Format<'uuid'> };
@@ -98,5 +98,16 @@ test('TEST 1', () => {
     }
   >;
 
+  ok(typia.random<IsAnswer>());
+});
+
+test('TEST 7. if omitted all of properties', () => {
+  type Question = {
+    id: string & typia.tags.Format<'uuid'>;
+    content: { id: string & typia.tags.Format<'uuid'> };
+    name: string;
+  };
+
+  type IsAnswer = Equal<DeepStrictOmit<Question, 'id' | 'name' | 'content'>, {}>;
   ok(typia.random<IsAnswer>());
 });
