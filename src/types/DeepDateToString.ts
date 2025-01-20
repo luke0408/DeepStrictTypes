@@ -1,3 +1,5 @@
+import { DeepStrictUnbrand } from './DeepStrictUnbrand';
+
 /**
  * A utility type that recursively converts all `Date` types within a nested object or array to `string`.
  *
@@ -5,8 +7,8 @@
  * - If `T` is a `Date`, it is converted to `string`.
  * - If `T` is an object, each key is checked recursively for `Date` types or nested objects.
  */
-export type DeepDateToString<T> =
-  T extends Array<infer I extends object>
+export type DeepDateToString<T extends object> =
+  DeepStrictUnbrand<T> extends Array<infer I extends object>
     ? Array<DeepDateToString<I>>
     : T extends Date
       ? string
@@ -14,8 +16,8 @@ export type DeepDateToString<T> =
           [K in keyof T]: T[K] extends infer I
             ? I extends Date
               ? string
-              : I extends object
-                ? DeepDateToString<I>
+              : DeepStrictUnbrand<I> extends object
+                ? DeepDateToString<DeepStrictUnbrand<I>>
                 : I
             : never;
         };

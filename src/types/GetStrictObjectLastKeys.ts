@@ -1,3 +1,4 @@
+import { DeepStrictUnbrand } from './DeepStrictUnbrand';
 import type { IsAny } from './IsAny';
 import type { IsUnion } from './IsUnion';
 import type { ValueType } from './ValueType';
@@ -53,8 +54,8 @@ export type DeepStrictObjectLastKeys<
   },
   P extends keyof T = keyof T,
 > =
-  T extends Array<infer Element>
+  DeepStrictUnbrand<T> extends Array<infer Element>
     ? Element extends object
-      ? `${Joiner['array']}.${DeepStrictObjectLastKeys<Element, Joiner>}`
+      ? `${Joiner['array']}.${DeepStrictObjectLastKeys<DeepStrictUnbrand<Element>, Joiner>}`
       : `${Joiner['array']}.${keyof Element extends string ? keyof Element : never}`
-    : __DeepStrictObjectKeys<T, Joiner, P>;
+    : __DeepStrictObjectKeys<DeepStrictUnbrand<T>, Joiner, Extract<P, keyof DeepStrictUnbrand<T>>>;
