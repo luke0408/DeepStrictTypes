@@ -32,10 +32,11 @@ type __DeepStrictObjectKeys<
   : never;
 
 /**
- * @title 중첩된 객체 혹은 배열의 모든 키를 표기하는 타입.
+ * @title Type for Listing All Keys of Nested Objects or Arrays.
  *
- * 중첩된 객체의 모든 키를 뽑는 타입으로, 만약 중첩된 객체가 있을 경우 점 기호를 기준으로 객체를 표현한다.
- * 배열인 경우에는 `[*]` 기호를 이용하여 표기한다.
+ * A type that extracts all keys of a nested object. If the object contains nested properties,
+ * the keys are represented using dot notation. For arrays, the keys are represented using
+ * the `[*]` symbol.
  *
  * ```ts
  * type Example1 = DeepStrictObjectKeys<{ a: { b: 1; c: 2 } }>; // "a" | "a.b" | "a.c"

@@ -10,6 +10,16 @@ type IsPartitionSameEntire<T, P = T> = T extends any // T를 각각의 요소 �
   : never;
 
 /**
- * @title 유니온 타입을 검증하는 타입.
+ * @title Type for checking if a type is a union type.
+ *
+ * This type uses the `IsPartitionSameEntire` type to check whether the provided type `T` is a union type.
+ * - It works by partitioning the type `T` and checking if the type consists of multiple distinct elements.
+ * - If the type `T` is a union type, the result will be `true`, otherwise `false`.
+ *
+ * Example usage:
+ * ```ts
+ * type Test1 = IsUnion<string | number>; // true
+ * type Test2 = IsUnion<string>; // false
+ * ```
  */
 export type IsUnion<T> = Equal<IsPartitionSameEntire<T>, boolean> extends true ? true : false;

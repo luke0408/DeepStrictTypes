@@ -13,6 +13,30 @@ type Unbrand<T extends Primitive & Record<any, any>> = T extends string & Record
             ? Extract<undefined, Omit<T, any>>
             : T;
 
+/**
+ * @title Type for Recursively Removing Branding Types.
+ *
+ * The `DeepStrictUnbrand<T>` type recursively processes the type `T` to remove any branding
+ * that may have been added to primitive types or object properties. Branding often occurs when
+ * extending or augmenting primitive types for type safety, and this type "unbrands" them, restoring
+ * the original primitive type (e.g., `string`, `number`, `boolean`, etc.).
+ *
+ * The helper type `Unbrand<T>` is used to handle primitive types and their respective branding,
+ * by stripping off any additional properties that may have been added to them.
+ *
+ * The recursion goes through:
+ * - Arrays: It recursively processes elements of the array, maintaining deep unbranding.
+ * - Objects: It recursively processes each key in the object, unbranding any branded properties.
+ * - Primitives: It removes branding from primitive types (`string`, `number`, `boolean`, `symbol`, `null`, `undefined`).
+ * - Dates: The `Date` type is preserved as it is.
+ *
+ * Example Usage:
+ * ```ts
+ * type Example1 = DeepStrictUnbrand<{ a: string & { __brand: 'unique' } }>; // { a: string }
+ * type Example2 = DeepStrictUnbrand<{ a: { b: number & { __brand: 'id' } } }>; // { a: { b: number } }
+ * type Example3 = DeepStrictUnbrand<Array<string & { __brand: 'email' }>>; // Array<string>
+ * ```
+ */
 export type DeepStrictUnbrand<T> =
   T extends Array<Date>
     ? Array<Date>

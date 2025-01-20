@@ -37,13 +37,20 @@ type _DeepStrictOmit<T extends object, K extends DeepStrictObjectKeys<T>> =
     : ____DeepStrictOmit<T, K>;
 
 /**
- * @title 인터페이스에서 특정 키를 제거하는 타입.
- * {@link DeepStrictObjectKeys} 을 이용해서 제거할 키를 고를 수 있다.
+ * @title Type for Removing Specific Keys from an Interface.
  *
+ * The `DeepStrictOmit<T, K>` type creates a new type by excluding properties
+ * corresponding to the key `K` from the object `T`, while preserving the nested structure.
+ * It enables precise omission of keys even in deeply nested objects or arrays.
+ *
+ * {@link DeepStrictObjectKeys} can be used to determine valid keys for omission,
+ * including nested keys represented with dot notation (`.`) and array indices represented with `[*]`.
+ *
+ * Example Usage:
  * ```ts
- * type Example1 = DeepStrictOmit<{ a: { b: 1; c: 2 } }, "a.b">;
- * type Example2 = DeepStrictOmit<{ a: { b: 1; c: { d: number }[] } }, "a.c[*].d">;
- * type Example3 = DeepStrictOmit<{ a: 1 }[], "[*].a">;
+ * type Example1 = DeepStrictOmit<{ a: { b: 1; c: 2 } }, "a.b">; // { a: { c: 2 } }
+ * type Example2 = DeepStrictOmit<{ a: { b: 1; c: { d: number }[] } }, "a.c[*].d">; // { a: { b: 1; c: {}[] } }
+ * type Example3 = DeepStrictOmit<{ a: 1 }[], "[*].a">; // {}[]
  * ```
  */
 export type DeepStrictOmit<T extends object, K extends DeepStrictObjectKeys<DeepStrictUnbrand<T>>> = _DeepStrictOmit<

@@ -5,13 +5,20 @@ import type { RemoveAfterDot } from './RemoveAfterDot';
 import type { RemoveLastProperty } from './RemoveLastProperty';
 
 /**
- * @title 인터페이스에서 특정 키만을 뽑는 타입.
- * {@link DeepStrictObjectKeys} 을 이용해서 뽑을 키를 고를 수 있다.
+ * @title Type for Selecting Specific Keys from an Interface.
  *
+ * The `DeepStrictPick<T, K>` type creates a new type by selecting only the properties
+ * corresponding to the key `K` from the object `T`, while preserving the nested structure.
+ * This type allows safely selecting specific keys, even from deeply nested objects or arrays.
+ *
+ * {@link DeepStrictObjectKeys} can be used to determine valid keys for selection,
+ * including nested keys represented with dot notation (`.`) and array indices represented with `[*]`.
+ *
+ * Example Usage:
  * ```ts
- * type Example1 = DeepStrictPick<{ a: { b: 1; c: 2 } }, "a.b">;
- * type Example2 = DeepStrictPick<{ a: { b: 1; c: { d: number }[] } }, "a.c[*].d">;
- * type Example3 = DeepStrictPick<{ a: 1 }[], "[*].a">;
+ * type Example1 = DeepStrictPick<{ a: { b: 1; c: 2 } }, "a.b">; // { a: { b: 1 } }
+ * type Example2 = DeepStrictPick<{ a: { b: 1; c: { d: number }[] } }, "a.c[*].d">; // { a: { c: { d: number }[] } }
+ * type Example3 = DeepStrictPick<{ a: 1 }[], "[*].a">; // { a: 1 }[]
  * ```
  */
 export type DeepStrictPick<T extends object, K extends DeepStrictObjectKeys<T>> = DeepStrictOmit<

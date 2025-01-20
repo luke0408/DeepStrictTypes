@@ -16,12 +16,22 @@ type ToObject<T> = Allow<T, object>;
 
 /**
  * @title The type that pulls out the type of a particular key on an interface.
- * @template {T}
- * @template {K}
  *
+ * This type extracts the type of a specific key from a nested object,
+ * supporting arrays and deeply nested keys. It uses `DeepStrictObjectKeys`
+ * to handle the extraction of keys and correctly resolves the type for the given key.
+ *
+ * - If the key points to a primitive value, the type is returned directly.
+ * - If the key points to an array, the type of the array elements is resolved.
+ * - It supports nested keys using `.` notation to handle deep objects and arrays.
+ *
+ * @template T The interface type.
+ * @template K The key string, which can represent a nested key path.
+ *
+ * Example usage:
  * ```ts
  * type Example1 = GetType<{ a: { b: { c: number } } }, "a.b">; // { c: number }
- * type Example = GetType<{ a: { b: { c: number } } }, "a.b.c">; // number
+ * type Example2 = GetType<{ a: { b: { c: number } } }, "a.b.c">; // number
  * ```
  */
 export type GetType<T extends object, K extends DeepStrictObjectKeys<T>> =
