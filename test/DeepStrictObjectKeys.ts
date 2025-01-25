@@ -144,3 +144,14 @@ test('array of branding type of string property', () => {
   type Answer = Equal<Question, 'prop' | 'other' | 'prop[*].unit' | 'prop[*].value'>;
   ok(typia.random<Answer>());
 });
+
+test('key in an array', () => {
+  type Question = DeepStrictObjectKeys<
+    {
+      prop: { value: number; unit: 'dollar' | 'won' }[];
+      other: number;
+    }[][]
+  >;
+  type Answer = Equal<Question, '[*].[*].prop' | '[*].[*].other' | '[*].[*].prop[*].unit' | '[*].[*].prop[*].value'>;
+  ok(typia.random<Answer>());
+});
