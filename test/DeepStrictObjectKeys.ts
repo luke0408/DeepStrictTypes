@@ -150,6 +150,17 @@ test('key in an array', () => {
     {
       prop: { value: number; unit: 'dollar' | 'won' }[];
       other: number;
+    }[]
+  >;
+  type Answer = Equal<Question, '[*].prop' | '[*].other' | '[*].prop[*].unit' | '[*].prop[*].value'>;
+  ok(typia.random<Answer>());
+});
+
+test('a key in a two-dimensional array', () => {
+  type Question = DeepStrictObjectKeys<
+    {
+      prop: { value: number; unit: 'dollar' | 'won' }[];
+      other: number;
     }[][]
   >;
   type Answer = Equal<Question, '[*].[*].prop' | '[*].[*].other' | '[*].[*].prop[*].unit' | '[*].[*].prop[*].value'>;
