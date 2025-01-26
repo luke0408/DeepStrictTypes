@@ -1,40 +1,31 @@
 import type { DeepStrictObjectKeys } from './DeepStrictObjectKeys';
-import type { DeepStrictUnbrand } from './DeepStrictUnbrand';
 import type { GetElementMember } from './GetMember';
 
-type ____DeepStrictOmit<T extends object, K extends DeepStrictObjectKeys<T>> = [K] extends [never]
-  ? T
-  : {
-      [key in keyof T as key extends K ? never : key]: T[key] extends Array<infer Element extends object>
-        ? key extends string
-          ? Element extends Date
+namespace DeepStrictOmit {
+  export type Infer<T extends object, K extends DeepStrictObjectKeys<T>> = [K] extends [never]
+    ? T
+    : {
+        [key in keyof T as key extends K ? never : key]: T[key] extends Array<infer Element extends object>
+          ? key extends string
+            ? Element extends Date
+              ? Array<Element>
+              : GetElementMember<K, key> extends DeepStrictObjectKeys<Element>
+                ? Array<Infer<Element, GetElementMember<K, key>>>
+                : Array<Element>
+            : never
+          : T[key] extends Array<infer Element>
             ? Array<Element>
-            : GetElementMember<K, key> extends DeepStrictObjectKeys<Element>
-              ? Array<____DeepStrictOmit<Element, GetElementMember<K, key>>>
-              : Array<Element>
-          : never
-        : T[key] extends Array<infer Element>
-          ? Array<Element>
-          : T[key] extends object
-            ? key extends string
-              ? T[key] extends Date
-                ? T[key]
-                : GetElementMember<K, key> extends DeepStrictObjectKeys<T[key]>
-                  ? ____DeepStrictOmit<T[key], GetElementMember<K, key>>
-                  : T[key]
-              : never
-            : T[key];
-    };
-
-type _DeepStrictOmit<T extends object, K extends DeepStrictObjectKeys<T>> =
-  T extends Array<infer Element extends object>
-    ? Array<
-        _DeepStrictOmit<
-          Element,
-          GetElementMember<K, ''> extends DeepStrictObjectKeys<Element> ? GetElementMember<K, ''> : never
-        >
-      >
-    : ____DeepStrictOmit<T, K>;
+            : T[key] extends object
+              ? key extends string
+                ? T[key] extends Date
+                  ? T[key]
+                  : GetElementMember<K, key> extends DeepStrictObjectKeys<T[key]>
+                    ? Infer<T[key], GetElementMember<K, key>>
+                    : T[key]
+                : never
+              : T[key];
+      };
+}
 
 /**
  * @title Type for Removing Specific Keys from an Interface.
@@ -53,7 +44,12 @@ type _DeepStrictOmit<T extends object, K extends DeepStrictObjectKeys<T>> =
  * type Example3 = DeepStrictOmit<{ a: 1 }[], "[*].a">; // {}[]
  * ```
  */
-export type DeepStrictOmit<T extends object, K extends DeepStrictObjectKeys<DeepStrictUnbrand<T>>> = _DeepStrictOmit<
-  T,
-  Extract<K, DeepStrictObjectKeys<T>>
->;
+export type DeepStrictOmit<T extends object, K extends DeepStrictObjectKeys<T>> =
+  T extends Array<infer Element extends object>
+    ? Array<
+        DeepStrictOmit<
+          Element,
+          GetElementMember<K, ''> extends DeepStrictObjectKeys<Element> ? GetElementMember<K, ''> : never
+        >
+      >
+    : DeepStrictOmit.Infer<T, K>;

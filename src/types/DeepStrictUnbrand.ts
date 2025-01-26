@@ -1,6 +1,6 @@
 namespace DeepStrictUnbrand {
   export type Primitive = string | number | boolean | symbol | null | undefined;
-  export type Unbrand<T extends Primitive & Record<any, any>> = T extends string & Record<any, any>
+  export type Infer<T extends Primitive & Record<any, any>> = T extends string & Record<any, any>
     ? string
     : T extends number & Record<any, any>
       ? number
@@ -45,7 +45,7 @@ export type DeepStrictUnbrand<T> =
     : T extends Array<infer I extends object>
       ? Array<DeepStrictUnbrand<I>>
       : T extends DeepStrictUnbrand.Primitive & NonNullable<unknown> // If T is branding type.
-        ? DeepStrictUnbrand.Unbrand<T>
+        ? DeepStrictUnbrand.Infer<T>
         : T extends Date // Date is a type of object,
           ? T // but it is not considered a branding type.
           : {

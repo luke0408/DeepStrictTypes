@@ -10,6 +10,8 @@ import type { RemoveLastProperty } from './RemoveLastProperty';
  * The `DeepStrictPick<T, K>` type creates a new type by selecting only the properties
  * corresponding to the key `K` from the object `T`, while preserving the nested structure.
  * This type allows safely selecting specific keys, even from deeply nested objects or arrays.
+ * `DeepStrictPick` is a type created with the idea of omit all but the selected key.
+ * Therefore, we use {@link DeepStrictOmit}.
  *
  * {@link DeepStrictObjectKeys} can be used to determine valid keys for selection,
  * including nested keys represented with dot notation (`.`) and array indices represented with `[*]`.
@@ -23,8 +25,5 @@ import type { RemoveLastProperty } from './RemoveLastProperty';
  */
 export type DeepStrictPick<T extends object, K extends DeepStrictObjectKeys<T>> = DeepStrictOmit<
   T,
-  Exclude<
-    DeepStrictObjectKeys<DeepStrictUnbrand<T>>,
-    K | RemoveLastProperty<K> | RemoveAfterDot<DeepStrictUnbrand<T>, K>
-  >
+  Exclude<DeepStrictObjectKeys<T>, K | RemoveLastProperty<K> | RemoveAfterDot<DeepStrictUnbrand<T>, K>>
 >;
