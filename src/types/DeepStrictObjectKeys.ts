@@ -51,10 +51,9 @@ export type DeepStrictObjectKeys<
     array: '[*]';
     object: '.';
   },
-  P extends keyof T = keyof T,
 > =
   DeepStrictUnbrand<T> extends Array<infer Element>
     ? Element extends object
       ? `${Joiner['array']}.${DeepStrictObjectKeys<Element, Joiner>}`
       : `${Joiner['array']}.${keyof Element extends string ? keyof Element : never}`
-    : DeepStrictObjectKeys.Infer<DeepStrictUnbrand<T>, Joiner, Extract<P, keyof DeepStrictUnbrand<T>>>;
+    : DeepStrictObjectKeys.Infer<DeepStrictUnbrand<T>, Joiner, Extract<keyof T, keyof DeepStrictUnbrand<T>>>;
