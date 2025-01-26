@@ -12,7 +12,6 @@ export function deepStrictObjectKeys<
     new Set(
       Object.entries(target).flatMap(([key, value]) => {
         if (target instanceof Array) {
-          console.log('value: ', value);
           return deepStrictObjectKeys(value, joiner).map((el) => `${joiner.array}.${el}`);
         } else if (target !== null && typeof target === 'object') {
           return deepStrictObjectKeys(value, joiner).flatMap((el) => `${joiner.object}.${el}`);

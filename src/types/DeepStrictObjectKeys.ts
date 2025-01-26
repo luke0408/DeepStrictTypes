@@ -4,8 +4,6 @@ import type { IsAny } from './IsAny';
 import type { IsUnion } from './IsUnion';
 import type { ValueType } from './ValueType';
 
-type a = DeepStrictObjectKeys.Infer<{ a: Date }>;
-
 namespace DeepStrictObjectKeys {
   export type Infer<
     Target extends object,
@@ -69,5 +67,9 @@ export type DeepStrictObjectKeys<
   DeepStrictUnbrand<Target> extends Array<infer Element>
     ? Element extends object
       ? `${Joiner['array']}.${DeepStrictObjectKeys<Element, Joiner, IsSafe>}`
-      : `${Joiner['array']}.${keyof Element extends string ? keyof Element : never}`
-    : DeepStrictObjectKeys.Infer<DeepStrictUnbrand<Target>, Joiner, IsSafe>;
+      : `${Joiner['array']}`
+    : DeepStrictUnbrand<Target> extends readonly (infer Element)[] // TODO: support tuple types
+      ? Element extends object
+        ? `${Joiner['array']}.${DeepStrictObjectKeys<Element, Joiner, IsSafe>}`
+        : `${Joiner['array']}`
+      : DeepStrictObjectKeys.Infer<DeepStrictUnbrand<Target>, Joiner, IsSafe>;

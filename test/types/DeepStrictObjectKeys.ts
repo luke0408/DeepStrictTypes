@@ -3,6 +3,34 @@ import test, { describe } from 'node:test';
 import typia, { tags } from 'typia';
 import { DeepStrictObjectKeys, Equal } from '../../src';
 
+describe('empty array', () => {
+  test('normal: isNotSafe', () => {
+    type Question = DeepStrictObjectKeys<
+      [],
+      {
+        array: '[*]';
+        object: '.';
+      },
+      false
+    >;
+    type Answer = Equal<Question, never>;
+    ok(typia.random<Answer>());
+  });
+
+  test('normal: isNotSafe', () => {
+    type Question = DeepStrictObjectKeys<
+      [],
+      {
+        array: '[*]';
+        object: '.';
+      },
+      true
+    >;
+    type Answer = Equal<Question, never>;
+    ok(typia.random<Answer>());
+  });
+});
+
 describe('Date props', () => {
   test('normal: isNotSafe', () => {
     type Question = DeepStrictObjectKeys<
@@ -575,6 +603,62 @@ describe('a key in a two-dimensional array', () => {
       true
     >;
     type Answer = Equal<Question, '[*].[*].prop' | '[*].[*].other' | '[*].[*].prop[*].unit' | '[*].[*].prop[*].value'>;
+    ok(typia.random<Answer>());
+  });
+});
+
+describe('readonly empty array. (tuple)', () => {
+  test('normal: isNotSafe', () => {
+    type Question = DeepStrictObjectKeys<
+      readonly [],
+      {
+        array: '[*]';
+        object: '.';
+      },
+      false
+    >;
+    type Answer = Equal<Question, never>;
+    ok(typia.random<Answer>());
+  });
+
+  test('normal: isSafe', () => {
+    type Question = DeepStrictObjectKeys<
+      readonly [],
+      {
+        array: '[*]';
+        object: '.';
+      },
+      true
+    >;
+    type Answer = Equal<Question, never>;
+    ok(typia.random<Answer>());
+  });
+});
+
+describe('readonly not empty array. (tuple)', () => {
+  test('normal: isNotSafe', () => {
+    type Question = DeepStrictObjectKeys<
+      readonly [1],
+      {
+        array: '[*]';
+        object: '.';
+      },
+      false
+    >;
+    type Answer = Equal<Question, '[*]'>;
+    ok(typia.random<Answer>());
+  });
+
+  test('normal: isSafe', () => {
+    type Question = DeepStrictObjectKeys<
+      readonly [1],
+      {
+        array: '[*]';
+        object: '.';
+      },
+      true
+    >;
+    type Answer = Equal<Question, '[*]'>;
     ok(typia.random<Answer>());
   });
 });
