@@ -1,7 +1,7 @@
 import { ok } from 'assert';
 import test from 'node:test';
 import typia, { tags } from 'typia';
-import { Equal, GetType } from '../src';
+import { Equal, GetType } from '../../src';
 
 test('Date props', () => {
   type Question = GetType<

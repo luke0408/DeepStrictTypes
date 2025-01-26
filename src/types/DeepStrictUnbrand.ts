@@ -39,8 +39,9 @@ namespace DeepStrictUnbrand {
  * type Example3 = DeepStrictUnbrand<Array<string & { __brand: 'email' }>>; // Array<string>
  * ```
  */
-export type DeepStrictUnbrand<T> =
-  T extends Array<Date>
+export type DeepStrictUnbrand<T> = T extends []
+  ? []
+  : T extends Array<Date>
     ? Array<Date>
     : T extends Array<infer I extends object>
       ? Array<DeepStrictUnbrand<I>>

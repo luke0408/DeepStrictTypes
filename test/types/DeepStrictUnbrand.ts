@@ -1,7 +1,21 @@
-import typia from 'typia';
-import { DeepStrictUnbrand, Equal } from '../src';
-import test from 'node:test';
 import { ok } from 'node:assert';
+import test from 'node:test';
+import typia from 'typia';
+import { DeepStrictUnbrand, Equal } from '../../src';
+
+test('If it is empty array', () => {
+  type Question = DeepStrictUnbrand<[]>;
+  type Answer = Equal<Question, []>;
+
+  ok(typia.random<Answer>());
+});
+
+test('If it is empty array', () => {
+  type Question = DeepStrictUnbrand<[][]>;
+  type Answer = Equal<Question, [][]>;
+
+  ok(typia.random<Answer>());
+});
 
 test('If it is not a brand type', () => {
   type Question = DeepStrictUnbrand<string | Date>;

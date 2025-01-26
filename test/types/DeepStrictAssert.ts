@@ -1,6 +1,6 @@
 import test from 'node:test';
 import typia, { tags } from 'typia';
-import { deepStrictAssert } from '../src';
+import { deepStrictAssert } from '../../src';
 
 interface Example {
   a: number;
