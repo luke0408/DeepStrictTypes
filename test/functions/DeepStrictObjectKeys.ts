@@ -36,7 +36,7 @@ test('[function] [deepStrictObjectKeys] branding type of string', () => {
     prop: number & { unit: 'dollar' | 'won' };
     other: number;
   }
-  const target = typia.random<Target>();
+  const target: Target = { prop: 1 as number & { unit: 'dollar' | 'won' }, other: 1 };
   deepStrictEqual(deepStrictObjectKeys(target), typia.misc.literals<DeepStrictObjectKeys<Target>>());
 });
 
@@ -115,7 +115,7 @@ test('[function] [deepStrictObjectKeys] array of branding type of string propert
     prop: (string & { unit: 'dollar' | 'won' })[];
     other: number;
   }
-  const target = typia.random<Target>();
+  const target: Target = { prop: ['1' as string & { unit: 'dollar' | 'won' }], other: 1 };
   deepStrictEqual(deepStrictObjectKeys(target), typia.misc.literals<DeepStrictObjectKeys<Target>>());
 });
 
