@@ -9,12 +9,6 @@ import type { RemoveArraySymbol } from './RemoveArraySymbol';
 type ValueOf<T> = T[keyof T];
 
 /**
- * @title A is the type that transforms the shape of B
- */
-type Allow<A, B> = A extends B ? A : never;
-type ToObject<T> = Allow<T, object>;
-
-/**
  * @title The type that pulls out the type of a particular key on an interface.
  *
  * This type extracts the type of a specific key from a nested object,
@@ -36,25 +30,22 @@ type ToObject<T> = Allow<T, object>;
  */
 export type GetType<T extends object, K extends DeepStrictObjectKeys<T>> =
   StringType.Split<K, '.'> extends [infer First extends keyof T]
-    ? ValueOf<ToObject<Pick<T, First>>>
+    ? ValueOf<Pick<T, First>>
     : StringType.Split<K, '.'> extends [infer First extends string, ...infer Rest extends string[]]
       ? RemoveArraySymbol<First> extends keyof T
-        ? ValueOf<ToObject<Pick<T, RemoveArraySymbol<First>>>> extends object
-          ? ValueOf<ToObject<Pick<T, RemoveArraySymbol<First>>>> extends Array<infer E>
+        ? ValueOf<Pick<T, RemoveArraySymbol<First>>> extends object
+          ? ValueOf<Pick<T, RemoveArraySymbol<First>>> extends Array<infer E>
             ? E extends object
-              ? GetType<E, Allow<ArrayType.Join<Rest, '.'>, DeepStrictObjectKeys<E>>>
+              ? GetType<E, Extract<ArrayType.Join<Rest, '.'>, DeepStrictObjectKeys<E>>>
               : E
             : GetType<
-                ValueOf<ToObject<Pick<T, RemoveArraySymbol<First>>>>,
-                Allow<
-                  ArrayType.Join<Rest, '.'>,
-                  DeepStrictObjectKeys<ValueOf<ToObject<Pick<T, RemoveArraySymbol<First>>>>>
-                >
+                ValueOf<Pick<T, RemoveArraySymbol<First>>>,
+                Extract<ArrayType.Join<Rest, '.'>, DeepStrictObjectKeys<ValueOf<Pick<T, RemoveArraySymbol<First>>>>>
               >
           : never
         : T extends any[]
           ? RemoveArraySymbol<First> extends '' // just empty string type like as `[].campaign`
-            ? GetType<ElementOf<T>, Allow<ArrayType.Join<Rest, '.'>, DeepStrictObjectKeys<ElementOf<T>>>>
+            ? GetType<ElementOf<T>, Extract<ArrayType.Join<Rest, '.'>, DeepStrictObjectKeys<ElementOf<T>>>>
             : never
           : never
       : never;
