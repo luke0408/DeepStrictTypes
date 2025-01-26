@@ -1,5 +1,6 @@
 export * from './DeepStrictAssert';
 export * from './types/DeepDateToString';
+export * from './types/DeepStrictMerge';
 export * from './types/DeepStrictObjectKeys';
 export * from './types/DeepStrictObjectLastKeys';
 export * from './types/DeepStrictOmit';
