@@ -117,29 +117,28 @@ type CityType = GetType<Example, 'user.address.city'>;
 type AddressType = GetType<Example, 'user.address'>;
 ```
 
-## Utility SubTypes
+## Utility functions (Experimental)
 
-### `ElementOf`
-
-Extract the type of elements from an array type `T`.
+### `DeepStrictAssert`
 
 ```typescript
-type ArrayExample = string[];
+interface Example {
+  a: number;
+  b: number;
+  c: {
+    d: string;
+    e: string;
+    f: {
+      g: boolean;
+      h: boolean;
+    }[];
+  }[];
+}
 
-// Result: string
-type ElementType = ElementOf<ArrayExample>;
-```
+declare const E: Example;
 
-### `Equal`
-
-Evaluate whether types `A` and `B` are the same, returning `true` or `false`. Useful for type validation.
-
-```typescript
-type A = { a: number };
-type B = { a: number };
-
-// Result: true
-type AreEqual = Equal<A, B>;
+// Expected: { c: Array<{ d: string }> }
+const answer = deepStrictAssert(E)('c[*].d');
 ```
 
 ---
