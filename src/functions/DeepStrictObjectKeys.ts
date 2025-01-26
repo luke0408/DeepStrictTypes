@@ -3,7 +3,7 @@ import { DeepStrictObjectKeys } from '../types';
 export function deepStrictObjectKeys<
   T extends object,
   Joiner extends { array: string; object: string } = { array: '[*]'; object: '.' },
->(target: T, joiner?: Joiner): DeepStrictObjectKeys<T, Joiner>[] {
+>(target: T, joiner?: Joiner): DeepStrictObjectKeys<T, Joiner, false>[] {
   if (joiner === undefined) {
     joiner = { array: '[*]', object: '.' } as Joiner;
   }
@@ -11,15 +11,14 @@ export function deepStrictObjectKeys<
   return Array.from(
     new Set(
       Object.entries(target).flatMap(([key, value]) => {
-        if (value instanceof Array) {
-          const children = value.flatMap((el) => deepStrictObjectKeys(el));
-          return [key, ...children];
-        } else if (value !== null && typeof value === 'object') {
-          const children = deepStrictObjectKeys(value);
-          return [key, ...children];
+        if (target instanceof Array) {
+          console.log('value: ', value);
+          return deepStrictObjectKeys(value, joiner).map((el) => `${joiner.array}.${el}`);
+        } else if (target !== null && typeof target === 'object') {
+          return deepStrictObjectKeys(value, joiner).flatMap((el) => `${joiner.object}.${el}`);
+        } else {
+          return [];
         }
-
-        return [key];
       }),
     ),
   ) as DeepStrictObjectKeys<T, Joiner>[];

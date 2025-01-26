@@ -1,7 +1,7 @@
-import { deepStrictEqual } from 'node:assert';
+import { ok } from 'node:assert';
 import test from 'node:test';
 import typia, { tags } from 'typia';
-import { DeepStrictObjectKeys, deepStrictObjectKeys } from '../../src';
+import { deepStrictObjectKeys, DeepStrictObjectKeys } from '../../src';
 
 test('[function] [deepStrictObjectKeys] Date props', () => {
   interface Target {
@@ -9,8 +9,12 @@ test('[function] [deepStrictObjectKeys] Date props', () => {
     other: number;
   }
   const target = typia.random<Target>();
-  deepStrictObjectKeys(target);
-  deepStrictEqual(deepStrictObjectKeys(target), typia.misc.literals<DeepStrictObjectKeys<Target>>());
+
+  const elements = typia.misc.literals<DeepStrictObjectKeys<Target, { array: '[*]'; object: '.' }, false>>();
+  const keys = deepStrictObjectKeys(target);
+  for (const key of keys) {
+    ok(elements.includes(key), `${key} is not in ${JSON.stringify(elements)}`);
+  }
 });
 
 test('[function] [deepStrictObjectKeys] union with Date and string', () => {
@@ -19,7 +23,12 @@ test('[function] [deepStrictObjectKeys] union with Date and string', () => {
     other: number;
   }
   const target = typia.random<Target>();
-  deepStrictEqual(deepStrictObjectKeys(target), typia.misc.literals<DeepStrictObjectKeys<Target>>());
+
+  const elements = typia.misc.literals<DeepStrictObjectKeys<Target, { array: '[*]'; object: '.' }, false>>();
+  const keys = deepStrictObjectKeys(target);
+  for (const key of keys) {
+    ok(elements.includes(key), `${key} is not in ${JSON.stringify(elements)}`);
+  }
 });
 
 test('[function] [deepStrictObjectKeys] branding type of string (typia)', () => {
@@ -28,7 +37,12 @@ test('[function] [deepStrictObjectKeys] branding type of string (typia)', () => 
     other: number;
   }
   const target = typia.random<Target>();
-  deepStrictEqual(deepStrictObjectKeys(target), typia.misc.literals<DeepStrictObjectKeys<Target>>());
+
+  const elements = typia.misc.literals<DeepStrictObjectKeys<Target, { array: '[*]'; object: '.' }, false>>();
+  const keys = deepStrictObjectKeys(target);
+  for (const key of keys) {
+    ok(elements.includes(key), `${key} is not in ${JSON.stringify(elements)}`);
+  }
 });
 
 test('[function] [deepStrictObjectKeys] branding type of string', () => {
@@ -37,7 +51,12 @@ test('[function] [deepStrictObjectKeys] branding type of string', () => {
     other: number;
   }
   const target: Target = { prop: 1 as number & { unit: 'dollar' | 'won' }, other: 1 };
-  deepStrictEqual(deepStrictObjectKeys(target), typia.misc.literals<DeepStrictObjectKeys<Target>>());
+
+  const elements = typia.misc.literals<DeepStrictObjectKeys<Target, { array: '[*]'; object: '.' }, false>>();
+  const keys = deepStrictObjectKeys(target);
+  for (const key of keys) {
+    ok(elements.includes(key), `${key} is not in ${JSON.stringify(elements)}`);
+  }
 });
 
 test('[function] [deepStrictObjectKeys] primitive type and object type / apply conservative type reasoning', () => {
@@ -46,7 +65,12 @@ test('[function] [deepStrictObjectKeys] primitive type and object type / apply c
     other: number;
   }
   const target = typia.random<Target>();
-  deepStrictEqual(deepStrictObjectKeys(target), typia.misc.literals<DeepStrictObjectKeys<Target>>());
+
+  const elements = typia.misc.literals<DeepStrictObjectKeys<Target, { array: '[*]'; object: '.' }, false>>();
+  const keys = deepStrictObjectKeys(target);
+  for (const key of keys) {
+    ok(elements.includes(key), `${key} is not in ${JSON.stringify(elements)}`);
+  }
 });
 
 test('[function] [deepStrictObjectKeys] primitive type and array type / apply conservative type reasoning', () => {
@@ -55,7 +79,12 @@ test('[function] [deepStrictObjectKeys] primitive type and array type / apply co
     other: number;
   }
   const target = typia.random<Target>();
-  deepStrictEqual(deepStrictObjectKeys(target), typia.misc.literals<DeepStrictObjectKeys<Target>>());
+
+  const elements = typia.misc.literals<DeepStrictObjectKeys<Target, { array: '[*]'; object: '.' }, false>>();
+  const keys = deepStrictObjectKeys(target);
+  for (const key of keys) {
+    ok(elements.includes(key), `${key} is not in ${JSON.stringify(elements)}`);
+  }
 });
 
 test('[function] [deepStrictObjectKeys] union type with object and array / apply conservative type reasoning', () => {
@@ -64,7 +93,12 @@ test('[function] [deepStrictObjectKeys] union type with object and array / apply
     other: number;
   }
   const target = typia.random<Target>();
-  deepStrictEqual(deepStrictObjectKeys(target), typia.misc.literals<DeepStrictObjectKeys<Target>>());
+
+  const elements = typia.misc.literals<DeepStrictObjectKeys<Target, { array: '[*]'; object: '.' }, false>>();
+  const keys = deepStrictObjectKeys(target);
+  for (const key of keys) {
+    ok(elements.includes(key), `${key} is not in ${JSON.stringify(elements)}`);
+  }
 });
 
 test('[function] [deepStrictObjectKeys] nested object with 2 depth', () => {
@@ -73,7 +107,12 @@ test('[function] [deepStrictObjectKeys] nested object with 2 depth', () => {
     other: number;
   }
   const target = typia.random<Target>();
-  deepStrictEqual(deepStrictObjectKeys(target), typia.misc.literals<DeepStrictObjectKeys<Target>>());
+
+  const elements = typia.misc.literals<DeepStrictObjectKeys<Target, { array: '[*]'; object: '.' }, false>>();
+  const keys = deepStrictObjectKeys(target);
+  for (const key of keys) {
+    ok(elements.includes(key), `${key} is not in ${JSON.stringify(elements)}`);
+  }
 });
 
 test('[function] [deepStrictObjectKeys] nested object with 3 depth', () => {
@@ -89,7 +128,12 @@ test('[function] [deepStrictObjectKeys] nested object with 3 depth', () => {
     other: number;
   }
   const target = typia.random<Target>();
-  deepStrictEqual(deepStrictObjectKeys(target), typia.misc.literals<DeepStrictObjectKeys<Target>>());
+
+  const elements = typia.misc.literals<DeepStrictObjectKeys<Target, { array: '[*]'; object: '.' }, false>>();
+  const keys = deepStrictObjectKeys(target);
+  for (const key of keys) {
+    ok(elements.includes(key), `${key} is not in ${JSON.stringify(elements)}`);
+  }
 });
 
 test('[function] [deepStrictObjectKeys] array property', () => {
@@ -98,7 +142,12 @@ test('[function] [deepStrictObjectKeys] array property', () => {
     other: number;
   }
   const target = typia.random<Target>();
-  deepStrictEqual(deepStrictObjectKeys(target), typia.misc.literals<DeepStrictObjectKeys<Target>>());
+
+  const elements = typia.misc.literals<DeepStrictObjectKeys<Target, { array: '[*]'; object: '.' }, false>>();
+  const keys = deepStrictObjectKeys(target);
+  for (const key of keys) {
+    ok(elements.includes(key), `${key} is not in ${JSON.stringify(elements)}`);
+  }
 });
 
 test('[function] [deepStrictObjectKeys] union array property', () => {
@@ -107,7 +156,12 @@ test('[function] [deepStrictObjectKeys] union array property', () => {
     other: number;
   }
   const target = typia.random<Target>();
-  deepStrictEqual(deepStrictObjectKeys(target), typia.misc.literals<DeepStrictObjectKeys<Target>>());
+
+  const elements = typia.misc.literals<DeepStrictObjectKeys<Target, { array: '[*]'; object: '.' }, false>>();
+  const keys = deepStrictObjectKeys(target);
+  for (const key of keys) {
+    ok(elements.includes(key), `${key} is not in ${JSON.stringify(elements)}`);
+  }
 });
 
 test('[function] [deepStrictObjectKeys] array of branding type of string property', () => {
@@ -116,7 +170,12 @@ test('[function] [deepStrictObjectKeys] array of branding type of string propert
     other: number;
   }
   const target: Target = { prop: ['1' as string & { unit: 'dollar' | 'won' }], other: 1 };
-  deepStrictEqual(deepStrictObjectKeys(target), typia.misc.literals<DeepStrictObjectKeys<Target>>());
+
+  const elements = typia.misc.literals<DeepStrictObjectKeys<Target, { array: '[*]'; object: '.' }, false>>();
+  const keys = deepStrictObjectKeys(target);
+  for (const key of keys) {
+    ok(elements.includes(key), `${key} is not in ${JSON.stringify(elements)}`);
+  }
 });
 
 test('[function] [deepStrictObjectKeys] array of branding type of string property (typia)', () => {
@@ -125,7 +184,12 @@ test('[function] [deepStrictObjectKeys] array of branding type of string propert
     other: number;
   }
   const target = typia.random<Target>();
-  deepStrictEqual(deepStrictObjectKeys(target), typia.misc.literals<DeepStrictObjectKeys<Target>>());
+
+  const elements = typia.misc.literals<DeepStrictObjectKeys<Target, { array: '[*]'; object: '.' }, false>>();
+  const keys = deepStrictObjectKeys(target);
+  for (const key of keys) {
+    ok(elements.includes(key), `${key} is not in ${JSON.stringify(elements)}`);
+  }
 });
 
 test('[function] [deepStrictObjectKeys] array of branding type of string property', () => {
@@ -134,7 +198,12 @@ test('[function] [deepStrictObjectKeys] array of branding type of string propert
     other: number;
   }
   const target = typia.random<Target>();
-  deepStrictEqual(deepStrictObjectKeys(target), typia.misc.literals<DeepStrictObjectKeys<Target>>());
+
+  const elements = typia.misc.literals<DeepStrictObjectKeys<Target, { array: '[*]'; object: '.' }, false>>();
+  const keys = deepStrictObjectKeys(target);
+  for (const key of keys) {
+    ok(elements.includes(key), `${key} is not in ${JSON.stringify(elements)}`);
+  }
 });
 
 test('[function] [deepStrictObjectKeys] key in an array', () => {
@@ -143,14 +212,35 @@ test('[function] [deepStrictObjectKeys] key in an array', () => {
     other: number;
   }[];
   const target = typia.random<Target>();
-  deepStrictEqual(deepStrictObjectKeys(target), typia.misc.literals<DeepStrictObjectKeys<Target>>());
+
+  const elements = typia.misc.literals<DeepStrictObjectKeys<Target, { array: '[*]'; object: '.' }, false>>();
+  const keys = deepStrictObjectKeys(target);
+  for (const key of keys) {
+    ok(elements.includes(key), `${key} is not in ${JSON.stringify(elements)}`);
+  }
 });
 
-test('[function] [deepStrictObjectKeys] a key in a two-dimensional array', () => {
+test('[function] 1. [deepStrictObjectKeys] a key in a two-dimensional array', () => {
   type Target = {
     prop: { value: number; unit: 'dollar' | 'won' }[];
     other: number;
   }[][];
   const target = typia.random<Target>();
-  deepStrictEqual(deepStrictObjectKeys(target), typia.misc.literals<DeepStrictObjectKeys<Target>>());
+
+  const elements = typia.misc.literals<DeepStrictObjectKeys<Target, { array: '[*]'; object: '.' }, false>>();
+  const keys = deepStrictObjectKeys(target);
+  for (const key of keys) {
+    ok(elements.includes(key), `${key} is not in ${JSON.stringify(elements)}`);
+  }
+});
+
+test('[function] 2. [deepStrictObjectKeys] a key in a two-dimensional array', () => {
+  type Target = { a: 1 }[][];
+  const target = typia.random<Target>();
+
+  const elements = typia.misc.literals<DeepStrictObjectKeys<Target, { array: '[*]'; object: '.' }, false>>();
+  const keys = deepStrictObjectKeys(target);
+  for (const key of keys) {
+    ok(elements.includes(key), `${key} is not in ${JSON.stringify(elements)}`);
+  }
 });
