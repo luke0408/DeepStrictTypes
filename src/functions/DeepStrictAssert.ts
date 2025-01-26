@@ -1,5 +1,5 @@
-import { DeepStrictObjectKeys } from './types/DeepStrictObjectKeys';
-import { DeepStrictPick } from './types/DeepStrictPick';
+import { DeepStrictObjectKeys } from '../types/DeepStrictObjectKeys';
+import { DeepStrictPick } from '../types/DeepStrictPick';
 
 export const deepStrictAssert =
   <T extends object>(input: T) =>
