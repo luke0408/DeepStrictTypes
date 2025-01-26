@@ -2,7 +2,7 @@ import { ok } from 'assert';
 import test from 'node:test';
 import typia from 'typia';
 import { MaxLength, MinLength } from 'typia/lib/tags';
-import { DeepStrictOmit, Equal } from '../src';
+import { DeepStrictOmit, Equal } from '../../src';
 
 import { IShoppingSale } from '@samchon/shopping-api/lib/structures/shoppings/sales/IShoppingSale';
 

@@ -1,10 +1,10 @@
 import { ok } from 'node:assert';
 import test from 'node:test';
 import typia, { tags } from 'typia';
-import { DeepStrictObjectLastKeys, Equal } from '../src';
+import { DeepStrictObjectKeys, Equal } from '../../src';
 
 test('Date props', () => {
-  type Question = DeepStrictObjectLastKeys<{
+  type Question = DeepStrictObjectKeys<{
     prop: Date;
     other: number;
   }>;
@@ -13,7 +13,7 @@ test('Date props', () => {
 });
 
 test('union with Date and string', () => {
-  type Question = DeepStrictObjectLastKeys<{
+  type Question = DeepStrictObjectKeys<{
     prop: Date | string;
     other: number;
   }>;
@@ -22,7 +22,7 @@ test('union with Date and string', () => {
 });
 
 test('branding type of string (typia)', () => {
-  type Question = DeepStrictObjectLastKeys<{
+  type Question = DeepStrictObjectKeys<{
     prop: string & tags.Format<'date-time'>;
     other: number;
   }>;
@@ -31,7 +31,7 @@ test('branding type of string (typia)', () => {
 });
 
 test('branding type of string', () => {
-  type Question = DeepStrictObjectLastKeys<{
+  type Question = DeepStrictObjectKeys<{
     prop: number & { unit: 'dollar' | 'won' };
     other: number;
   }>;
@@ -40,7 +40,7 @@ test('branding type of string', () => {
 });
 
 test('primitive type and object type / apply conservative type reasoning', () => {
-  type Question = DeepStrictObjectLastKeys<{
+  type Question = DeepStrictObjectKeys<{
     prop: number | { value: number; unit: 'dollar' | 'won' };
     other: number;
   }>;
@@ -49,7 +49,7 @@ test('primitive type and object type / apply conservative type reasoning', () =>
 });
 
 test('primitive type and array type / apply conservative type reasoning', () => {
-  type Question = DeepStrictObjectLastKeys<{
+  type Question = DeepStrictObjectKeys<{
     prop: number | Array<{ value: number; unit: 'dollar' | 'won' }>;
     other: number;
   }>;
@@ -58,7 +58,7 @@ test('primitive type and array type / apply conservative type reasoning', () => 
 });
 
 test('union type with object and array / apply conservative type reasoning', () => {
-  type Question = DeepStrictObjectLastKeys<{
+  type Question = DeepStrictObjectKeys<{
     prop: { value: number; unit: 'dollar' | 'won' } | Array<{ value: number; unit: 'dollar' | 'won' }>;
     other: number;
   }>;
@@ -67,16 +67,16 @@ test('union type with object and array / apply conservative type reasoning', () 
 });
 
 test('nested object with 2 depth', () => {
-  type Question = DeepStrictObjectLastKeys<{
+  type Question = DeepStrictObjectKeys<{
     prop: { value: number; unit: 'dollar' | 'won' };
     other: number;
   }>;
-  type Answer = Equal<Question, 'other' | 'prop.value' | 'prop.unit'>;
+  type Answer = Equal<Question, 'prop' | 'other' | 'prop.value' | 'prop.unit'>;
   ok(typia.random<Answer>());
 });
 
 test('nested object with 3 depth', () => {
-  type Question = DeepStrictObjectLastKeys<{
+  type Question = DeepStrictObjectKeys<{
     prop: {
       value: number;
       unit: 'dollar';
@@ -89,9 +89,11 @@ test('nested object with 3 depth', () => {
   }>;
   type Answer = Equal<
     Question,
-    | 'other' // depth 1
+    | 'prop' // depth 1
+    | 'other'
     | 'prop.value' // depth 2
     | 'prop.unit'
+    | 'prop.country'
     | 'prop.country.name' // depth 3
     | 'prop.country.location'
   >;
@@ -99,7 +101,7 @@ test('nested object with 3 depth', () => {
 });
 
 test('array property', () => {
-  type Question = DeepStrictObjectLastKeys<{
+  type Question = DeepStrictObjectKeys<{
     prop: number[];
     other: number;
   }>;
@@ -108,7 +110,7 @@ test('array property', () => {
 });
 
 test('union array property', () => {
-  type Question = DeepStrictObjectLastKeys<{
+  type Question = DeepStrictObjectKeys<{
     prop: (number | string)[];
     other: number;
   }>;
@@ -117,7 +119,7 @@ test('union array property', () => {
 });
 
 test('array of branding type of string property', () => {
-  type Question = DeepStrictObjectLastKeys<{
+  type Question = DeepStrictObjectKeys<{
     prop: (string & { unit: 'dollar' | 'won' })[];
     other: number;
   }>;
@@ -126,7 +128,7 @@ test('array of branding type of string property', () => {
 });
 
 test('array of branding type of string property (typia)', () => {
-  type Question = DeepStrictObjectLastKeys<{
+  type Question = DeepStrictObjectKeys<{
     prop: (string & tags.Format<'uuid'>)[];
     other: number;
   }>;
@@ -135,32 +137,32 @@ test('array of branding type of string property (typia)', () => {
 });
 
 test('array of branding type of string property', () => {
-  type Question = DeepStrictObjectLastKeys<{
+  type Question = DeepStrictObjectKeys<{
     prop: { value: number; unit: 'dollar' | 'won' }[];
     other: number;
   }>;
-  type Answer = Equal<Question, 'other' | 'prop[*].unit' | 'prop[*].value'>;
+  type Answer = Equal<Question, 'prop' | 'other' | 'prop[*].unit' | 'prop[*].value'>;
   ok(typia.random<Answer>());
 });
 
 test('key in an array', () => {
-  type Question = DeepStrictObjectLastKeys<
+  type Question = DeepStrictObjectKeys<
     {
       prop: { value: number; unit: 'dollar' | 'won' }[];
       other: number;
     }[]
   >;
-  type Answer = Equal<Question, '[*].other' | '[*].prop[*].unit' | '[*].prop[*].value'>;
+  type Answer = Equal<Question, '[*].prop' | '[*].other' | '[*].prop[*].unit' | '[*].prop[*].value'>;
   ok(typia.random<Answer>());
 });
 
 test('a key in a two-dimensional array', () => {
-  type Question = DeepStrictObjectLastKeys<
+  type Question = DeepStrictObjectKeys<
     {
       prop: { value: number; unit: 'dollar' | 'won' }[];
       other: number;
     }[][]
   >;
-  type Answer = Equal<Question, '[*].[*].other' | '[*].[*].prop[*].unit' | '[*].[*].prop[*].value'>;
+  type Answer = Equal<Question, '[*].[*].prop' | '[*].[*].other' | '[*].[*].prop[*].unit' | '[*].[*].prop[*].value'>;
   ok(typia.random<Answer>());
 });

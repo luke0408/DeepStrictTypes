@@ -1,7 +1,7 @@
 import { ok } from 'node:assert';
 import test from 'node:test';
 import typia from 'typia';
-import { DeepDateToString, Equal } from '../src';
+import { DeepDateToString, Equal } from '../../src';
 
 test('If the prop type of an object is string | Date', () => {
   type Question = DeepDateToString<{ prop: string | Date }>;

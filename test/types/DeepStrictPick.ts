@@ -1,7 +1,7 @@
 import { ok } from 'assert';
 import test from 'node:test';
 import typia from 'typia';
-import { DeepStrictPick, Equal } from '../src';
+import { DeepStrictPick, Equal } from '../../src';
 
 interface Example {
   a: number;

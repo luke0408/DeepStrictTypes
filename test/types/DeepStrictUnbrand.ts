@@ -1,7 +1,7 @@
-import typia from 'typia';
-import { DeepStrictUnbrand, Equal } from '../src';
-import test from 'node:test';
 import { ok } from 'node:assert';
+import test from 'node:test';
+import typia from 'typia';
+import { DeepStrictUnbrand, Equal } from '../../src';
 
 test('If it is not a brand type', () => {
   type Question = DeepStrictUnbrand<string | Date>;
