@@ -31,6 +31,13 @@ type Example = {
 type Keys = DeepStrictObjectKeys<Example>;
 ```
 
+Also, We create function for this type! Application of existing Object.keys to nested objects.
+
+```ts
+type Target = { a: 1 }[][];
+const keys = deepStrictObjectKeys({} as Target); // "[*].[*].a"[]
+```
+
 In arrays, elements are represented with the `[*]` symbol, ensuring perfect inference even for nested structures.
 
 ### `DeepStrictOmit`
