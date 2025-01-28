@@ -65,3 +65,15 @@ test('If property is a brand type in nested object', () => {
 
   ok(typia.random<Answer>());
 });
+
+test('if generic parameter is any[]', () => {
+  type Question = DeepStrictUnbrand<any[]>;
+  type Answer = Equal<Question, any[]>;
+  ok(typia.random<Answer>());
+});
+
+test('if generic parameter is any[]', () => {
+  type Question = DeepStrictUnbrand<{ a: number }[]>;
+  type Answer = Equal<Question, { a: number }[]>;
+  ok(typia.random<Answer>());
+});

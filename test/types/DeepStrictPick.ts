@@ -1,7 +1,7 @@
 import { ok } from 'assert';
 import test from 'node:test';
 import typia from 'typia';
-import { DeepStrictPick, Equal } from '../../src';
+import { DeepStrictObjectKeys, DeepStrictPick, Equal } from '../../src';
 
 interface Example {
   a: number;
@@ -45,6 +45,7 @@ test('DeepStrictPick(3)(2)', () => {
 });
 
 test('DeepStrictPick(3)(3)', () => {
+  type Keys = DeepStrictObjectKeys<{ a: 1 }[]>; // It must be '[*].a'
   type Question = DeepStrictPick<{ a: 1 }[], '[*].a'>;
   type Answer = Equal<Question, { a: 1 }[]>;
 

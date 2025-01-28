@@ -41,16 +41,14 @@ namespace DeepStrictUnbrand {
  */
 export type DeepStrictUnbrand<T> = T extends []
   ? []
-  : T extends Array<Date>
-    ? Array<Date>
-    : T extends Array<infer I extends object>
-      ? Array<DeepStrictUnbrand<I>>
-      : T extends DeepStrictUnbrand.Primitive & NonNullable<unknown> // If T is branding type.
-        ? DeepStrictUnbrand.Infer<T>
-        : T extends Date // Date is a type of object,
-          ? T // but it is not considered a branding type.
-          : {
-              [K in keyof T]: T[K] extends object
-                ? DeepStrictUnbrand<T[K]> // Recursively releases the branding type.
-                : T[K];
-            };
+  : T extends Array<infer I extends object>
+    ? Array<DeepStrictUnbrand<I>>
+    : T extends DeepStrictUnbrand.Primitive & NonNullable<unknown> // If T is branding type.
+      ? DeepStrictUnbrand.Infer<T>
+      : T extends Date // Date is a type of object,
+        ? T // but it is not considered a branding type.
+        : {
+            [K in keyof T]: T[K] extends object
+              ? DeepStrictUnbrand<T[K]> // Recursively releases the branding type.
+              : T[K];
+          };

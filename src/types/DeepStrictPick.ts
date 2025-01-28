@@ -25,5 +25,8 @@ import type { RemoveLastProperty } from './RemoveLastProperty';
  */
 export type DeepStrictPick<T extends object, K extends DeepStrictObjectKeys<T>> = DeepStrictOmit<
   T,
-  Exclude<DeepStrictObjectKeys<T>, K | RemoveLastProperty<K> | RemoveAfterDot<DeepStrictUnbrand<T>, K>>
+  Exclude<
+    DeepStrictObjectKeys<T>, //
+    K | RemoveLastProperty<K> | RemoveAfterDot<DeepStrictUnbrand<T>, K>
+  >
 >;

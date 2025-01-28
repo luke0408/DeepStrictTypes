@@ -9,36 +9,46 @@ namespace DeepStrictObjectKeys {
     Target extends object,
     Joiner extends { array: string; object: string } = { array: '[*]'; object: '.' },
     IsSafe extends boolean = true,
-    P extends keyof Target = keyof Target,
-  > = P extends string
-    ? IsUnion<Target[P]> extends true
-      ? Equal<IsSafe, true> extends true
-        ? P
-        : // If a user wants to explore a type that is a union of primitive types and object types.
-          | P
-            | (Target[P] extends infer E
-                ? E extends ValueType
-                  ? P
-                  : E extends object
-                    ? E extends Array<infer _Element extends object>
-                      ? `${P}${Joiner['array']}${Joiner['object']}${Infer<_Element, Joiner, IsSafe>}` // recursive
-                      : `${P}${Joiner['object']}${Infer<E, Joiner, IsSafe>}` // recursive
-                    : never // Remove all primitive types of union types.
-                : never)
-      : Target[P] extends Array<infer Element extends object>
-        ? P | `${P}${Joiner['array']}${Joiner['object']}${Infer<Element, Joiner, false>}`
-        : Target[P] extends ValueType
+    P extends keyof Target = Exclude<keyof Target, keyof []>,
+  > = [Target] extends [never]
+    ? never
+    : P extends string
+      ? IsUnion<Target[P]> extends true
+        ? Equal<IsSafe, true> extends true
           ? P
-          : IsAny<Target[P]> extends true
-            ? P
-            : Target[P] extends object
-              ? Target[P] extends Array<infer _Element>
+          : // If a user wants to explore a type that is a union of primitive types and object types.
+            | P
+              | (Target[P] extends infer E
+                  ? E extends ValueType
+                    ? P
+                    : E extends object
+                      ? E extends Array<infer _Element extends object>
+                        ?
+                            | P
+                            // | (Equal<IsSafe, true> extends true ? never : `${P}[*]`) // end of array
+                            | `${P}${Joiner['array']}${Joiner['object']}${Infer<_Element, Joiner, IsSafe>}` // recursive
+                        : `${P}${Joiner['object']}${Infer<E, Joiner, IsSafe>}` // recursive
+                      : never // Remove all primitive types of union types.
+                  : never)
+        : Target[P] extends Array<infer Element extends object>
+          ?
+              | P
+              // | (Equal<IsSafe, true> extends true ? never : `${P}[*]`) // end of array
+              | `${P}${Joiner['array']}${Joiner['object']}${Infer<Element, Joiner, false>}`
+          : Target[P] extends Array<infer _Element>
+            ? Equal<IsSafe, true> extends true
+              ? P
+              : P | never // `${P}[*]`
+            : Target[P] extends ValueType
+              ? P
+              : IsAny<Target[P]> extends true
                 ? P
-                : Target[P] extends Record<string, never>
-                  ? `${P}`
-                  : `${P}` | `${P}${Joiner['object']}${Infer<Target[P], Joiner, false>}`
-              : never
-    : never;
+                : Target[P] extends object
+                  ? Target[P] extends Record<string, never>
+                    ? `${P}`
+                    : `${P}` | `${P}${Joiner['object']}${Infer<Target[P], Joiner, false>}`
+                  : never
+      : never;
 }
 
 /**
@@ -64,12 +74,25 @@ export type DeepStrictObjectKeys<
   },
   IsSafe extends boolean = true,
 > =
+  // Equal<Target, any[]> extends true
+  //   ? Joiner['array']
+  //   :
+  // Equal<Target, never[]> extends true
+  //   ? Joiner['array']
+  //   :
+  // Equal<Target, any> extends true // If target is just any type, We just know that it is string.
+  //   ? string
+  //   :
   DeepStrictUnbrand<Target> extends Array<infer Element>
-    ? Element extends object
-      ? `${Joiner['array']}.${DeepStrictObjectKeys<Element, Joiner, IsSafe>}`
-      : `${Joiner['array']}`
+    ? IsAny<Element> extends true
+      ? Joiner['array']
+      : Element extends object
+        ? Joiner['array'] | `${Joiner['array']}.${DeepStrictObjectKeys<Element, Joiner, IsSafe>}`
+        : Joiner['array']
     : DeepStrictUnbrand<Target> extends readonly (infer Element)[] // TODO: support tuple types
-      ? Element extends object
-        ? `${Joiner['array']}.${DeepStrictObjectKeys<Element, Joiner, IsSafe>}`
-        : `${Joiner['array']}`
+      ? IsAny<Element> extends true
+        ? Joiner['array']
+        : Element extends object
+          ? Joiner['array'] | `${Joiner['array']}.${DeepStrictObjectKeys<Element, Joiner, IsSafe>}`
+          : Joiner['array']
       : DeepStrictObjectKeys.Infer<DeepStrictUnbrand<Target>, Joiner, IsSafe>;

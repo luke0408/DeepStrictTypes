@@ -31,6 +31,62 @@ describe('empty array', () => {
   });
 });
 
+describe('array of any', () => {
+  test('normal: isNotSafe', () => {
+    type Question = DeepStrictObjectKeys<
+      any[],
+      {
+        array: '[*]';
+        object: '.';
+      },
+      false
+    >;
+    type Answer = Equal<Question, '[*]'>;
+    ok(typia.random<Answer>());
+  });
+
+  test('normal: isNotSafe', () => {
+    type Question = DeepStrictObjectKeys<
+      any[],
+      {
+        array: '[*]';
+        object: '.';
+      },
+      true
+    >;
+    type Answer = Equal<Question, '[*]'>;
+    ok(typia.random<Answer>());
+  });
+});
+
+describe('number array', () => {
+  test('normal: isNotSafe', () => {
+    type Question = DeepStrictObjectKeys<
+      [1],
+      {
+        array: '[*]';
+        object: '.';
+      },
+      false
+    >;
+    type Answer = Equal<Question, '[*]'>;
+    ok(typia.random<Answer>());
+  });
+
+  test('normal: isNotSafe', () => {
+    type Question = DeepStrictObjectKeys<
+      [1],
+      {
+        array: '[*]';
+        object: '.';
+      },
+      true
+    >;
+    type Answer = Equal<Question, '[*]'>;
+    ok(typia.random<Answer>());
+  });
+});
+
 describe('Date props', () => {
   test('normal: isNotSafe', () => {
     type Question = DeepStrictObjectKeys<
@@ -120,6 +176,41 @@ describe('branding type of string (typia)', () => {
     type Question = DeepStrictObjectKeys<
       {
         prop: string & tags.Format<'date-time'>;
+        other: number;
+      },
+      {
+        array: '[*]';
+        object: '.';
+      },
+      true
+    >;
+    type Answer = Equal<Question, 'prop' | 'other'>;
+    ok(typia.random<Answer>());
+  });
+});
+
+describe('array as branding type of string (typia)', () => {
+  test('normal: isNotSafe', () => {
+    type Question = DeepStrictObjectKeys<
+      {
+        prop: (string & tags.Format<'date-time'>)[];
+        other: number;
+      },
+      {
+        array: '[*]';
+        object: '.';
+      },
+      false
+    >;
+
+    type Answer = Equal<Question, 'prop' | 'other'>;
+    ok(typia.random<Answer>());
+  });
+
+  test('normal: isSafe', () => {
+    type Question = DeepStrictObjectKeys<
+      {
+        prop: (string & tags.Format<'date-time'>)[];
         other: number;
       },
       {
@@ -552,7 +643,7 @@ describe('key in an array', () => {
       },
       false
     >;
-    type Answer = Equal<Question, '[*].prop' | '[*].other' | '[*].prop[*].unit' | '[*].prop[*].value'>;
+    type Answer = Equal<Question, '[*]' | '[*].prop' | '[*].other' | '[*].prop[*].value' | '[*].prop[*].unit'>;
     ok(typia.random<Answer>());
   });
 
@@ -568,7 +659,7 @@ describe('key in an array', () => {
       },
       true
     >;
-    type Answer = Equal<Question, '[*].prop' | '[*].other' | '[*].prop[*].unit' | '[*].prop[*].value'>;
+    type Answer = Equal<Question, '[*]' | '[*].prop' | '[*].other' | '[*].prop[*].value' | '[*].prop[*].unit'>;
     ok(typia.random<Answer>());
   });
 });
@@ -586,7 +677,10 @@ describe('a key in a two-dimensional array', () => {
       },
       false
     >;
-    type Answer = Equal<Question, '[*].[*].prop' | '[*].[*].other' | '[*].[*].prop[*].unit' | '[*].[*].prop[*].value'>;
+    type Answer = Equal<
+      Question,
+      '[*]' | '[*].[*]' | '[*].[*].prop' | '[*].[*].other' | '[*].[*].prop[*].value' | '[*].[*].prop[*].unit'
+    >;
     ok(typia.random<Answer>());
   });
 
@@ -602,7 +696,10 @@ describe('a key in a two-dimensional array', () => {
       },
       true
     >;
-    type Answer = Equal<Question, '[*].[*].prop' | '[*].[*].other' | '[*].[*].prop[*].unit' | '[*].[*].prop[*].value'>;
+    type Answer = Equal<
+      Question,
+      '[*]' | '[*].[*]' | '[*].[*].prop' | '[*].[*].other' | '[*].[*].prop[*].value' | '[*].[*].prop[*].unit'
+    >;
     ok(typia.random<Answer>());
   });
 });
@@ -659,6 +756,36 @@ describe('readonly not empty array. (tuple)', () => {
       true
     >;
     type Answer = Equal<Question, '[*]'>;
+    ok(typia.random<Answer>());
+  });
+});
+
+describe('Array<{a:number}>', () => {
+  type Target = { a: number }[];
+
+  test('normal: isNotSafe', () => {
+    type Question = DeepStrictObjectKeys<
+      Target,
+      {
+        array: '[*]';
+        object: '.';
+      },
+      false
+    >;
+    type Answer = Equal<Question, '[*]' | '[*].a'>;
+    ok(typia.random<Answer>());
+  });
+
+  test('normal: isSafe', () => {
+    type Question = DeepStrictObjectKeys<
+      Target,
+      {
+        array: '[*]';
+        object: '.';
+      },
+      false
+    >;
+    type Answer = Equal<Question, '[*]' | '[*].a'>;
     ok(typia.random<Answer>());
   });
 });
