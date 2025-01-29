@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { ArgumentParser } from './helpers/ArgumentParser';
+import { TestTreeLoader } from './helpers/TestTreeLoader';
 
 interface IOptions {
   include?: string[];
@@ -45,6 +46,9 @@ async function main(): Promise<void> {
    *  3-1. include에 package가 있으며 exclude에 file이 있는 경우
    *    => include한 패키지에서 exclude file 제외 후 실행
    */
+  const testSet = TestTreeLoader.load();
+  console.log(testSet);
+
   async function allTest() {
     /**
      * test code for types
