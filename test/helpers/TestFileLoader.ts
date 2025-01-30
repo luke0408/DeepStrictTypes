@@ -4,25 +4,16 @@ import path from 'path';
 export namespace TestFileLoader {
   export type FilterOption = { exclude?: string[]; include?: string[] };
 
-  const isIgnoredEntry = (entry: fs.Dirent): boolean => {
-    return entry.name.startsWith('.');
-  };
-
-  const isTestFile = (entry: fs.Dirent): boolean => {
-    return entry.isFile() && entry.name.endsWith('.js') && entry.name !== 'index.js';
-  };
-
   const filter = (files: string[], options: FilterOption): string[] => {
     return files.filter((file) => {
-      const isIncluded = options.include && options.include.some((incPath) => file.includes(incPath));
-      if (isIncluded) return true;
-      if (!isIncluded && options.include) return false;
+      if (isIncluded()) return true;
+      if (!isIncluded() && options.include) return false;
       if (options.exclude && options.exclude.some((exPath) => file.includes(exPath))) return false;
-    });
-  };
 
-  const isTestDirectory = (entry: fs.Dirent): boolean => {
-    return entry.isDirectory() && entry.name !== 'helpers';
+      function isIncluded() {
+        return options.include && options.include.some((incPath) => file.includes(incPath));
+      }
+    });
   };
 
   const traverse = (dir: string, files: string[]) => {
@@ -37,6 +28,18 @@ export namespace TestFileLoader {
         traverse(fullPath, files);
       } else if (isTestFile(entry)) {
         files.push(fullPath);
+      }
+
+      function isIgnoredEntry(entry: fs.Dirent): boolean {
+        return entry.name.startsWith('.');
+      }
+
+      function isTestFile(entry: fs.Dirent): boolean {
+        return entry.isFile() && entry.name.endsWith('.js') && entry.name !== 'index.js';
+      }
+
+      function isTestDirectory(entry: fs.Dirent): boolean {
+        return entry.isDirectory() && entry.name !== 'helpers';
       }
     }
   };
