@@ -11,11 +11,11 @@ export namespace TestFileLoader {
       return true;
 
       function isExcluded() {
-        return options.exclude?.some((exPath) => file.includes(exPath));
+        return options.exclude?.some((exPath) => file.split(__dirname).at(0)?.includes(exPath));
       }
 
       function isIncluded() {
-        return options.include?.some((incPath) => file.includes(incPath));
+        return options.include?.some((incPath) => file.split(__dirname).at(0)?.includes(incPath));
       }
     });
   };
