@@ -6,12 +6,16 @@ export namespace TestFileLoader {
 
   const filter = (files: string[], options: FilterOption): string[] => {
     return files.filter((file) => {
-      if (isIncluded()) return true;
-      if (!isIncluded() && options.include) return false;
-      if (options.exclude && options.exclude.some((exPath) => file.includes(exPath))) return false;
+      if (options.include) return isIncluded();
+      if (options.exclude) return !isExcluded();
+      return true;
+
+      function isExcluded() {
+        return options.exclude?.some((exPath) => file.includes(exPath));
+      }
 
       function isIncluded() {
-        return options.include && options.include.some((incPath) => file.includes(incPath));
+        return options.include?.some((incPath) => file.includes(incPath));
       }
     });
   };
