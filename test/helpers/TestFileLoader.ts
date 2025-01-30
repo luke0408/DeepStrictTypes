@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-export namespace TestTreeLoader {
+export namespace TestFileLoader {
   export type TestTree = { [dirname: string]: TestTree | string[] };
   export type FilterOption = { exclude?: string[]; include?: string[] };
 

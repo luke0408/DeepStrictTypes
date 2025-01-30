@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { ArgumentParser } from './helpers/ArgumentParser';
-import { TestTreeLoader } from './helpers/TestTreeLoader';
+import { TestFileLoader } from './helpers/TestFileLoader';
 
 interface IOptions {
   include?: string[];
@@ -22,7 +22,7 @@ const getOptions = () =>
 
 async function main(): Promise<void> {
   const options: IOptions = await getOptions();
-  const testSet = TestTreeLoader.load(__dirname, options);
+  const testSet = TestFileLoader.load(__dirname, options);
   console.log(testSet);
 
   async function allTest() {
