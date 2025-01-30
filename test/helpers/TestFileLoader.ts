@@ -39,7 +39,7 @@ export namespace TestFileLoader {
       }
 
       function isTestFile(entry: fs.Dirent): boolean {
-        return entry.isFile() && entry.name.endsWith('.js') && entry.name !== 'index.js';
+        return entry.isFile() && entry.name.endsWith('.js') && !entry.parentPath.endsWith('test');
       }
 
       function isTestDirectory(entry: fs.Dirent): boolean {
