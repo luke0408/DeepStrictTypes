@@ -48,6 +48,7 @@
   "license": "ISC",
   "devDependencies": {
     "@samchon/shopping-api": "^0.14.1",
+    "@types/inquirer": "^9.0.7",
     "@types/node": "^22.10.10",
     "prettier": "^3.4.2",
     "rimraf": "^6.0.1",
