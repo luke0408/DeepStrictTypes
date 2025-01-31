@@ -2,16 +2,14 @@ import { DeepStrictObjectKeys } from '../types';
 
 type RemoveStartWithDot<T extends string> = T extends `.${infer R extends string}` ? R : T;
 
-type Replace<T extends string> = ReplaceWildcard<T>;
-
-type ReplaceWildcard<S extends string> = S extends '[*]'
+type Replace<S extends string> = S extends '[*]'
   ? `${number}`
   : S extends `[*].${infer Rest}`
-    ? `${number}.${ReplaceWildcard<Rest>}`
+    ? `${number}.${Replace<Rest>}`
     : S extends `${infer Prefix extends string}.[*]${infer Rest}` // `[ ]` 패턴을 찾음
-      ? `${Prefix}.${number}${ReplaceWildcard<Rest>}` // `[ ]`를 `${number}`로 대체하고, 나머지를 재귀 처리
+      ? `${Prefix}.${number}${Replace<Rest>}` // `[ ]`를 `${number}`로 대체하고, 나머지를 재귀 처리
       : S extends `${infer Prefix extends string}[*]${infer Rest}`
-        ? `${Prefix}.${number}${ReplaceWildcard<Rest>}`
+        ? `${Prefix}.${number}${Replace<Rest>}`
         : S; // 더 이상 `[ ]`가 없으면 문자열 반환
 
 type ReturnType<
