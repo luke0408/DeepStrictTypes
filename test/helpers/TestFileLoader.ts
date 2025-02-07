@@ -11,11 +11,15 @@ export namespace TestFileLoader {
       return true;
 
       function isExcluded() {
-        return options.exclude?.some((exPath) => file.split(__dirname).at(0)?.replace(/\.js$/, '').includes(exPath));
+        return options.exclude?.some((exPath) => isMatched(exPath));
       }
 
       function isIncluded() {
-        return options.include?.some((incPath) => file.split(__dirname).at(0)?.replace(/\.js$/, '').includes(incPath));
+        return options.include?.some((incPath) => isMatched(incPath));
+      }
+
+      function isMatched(path: string): unknown {
+        return file.split(__dirname).at(0)?.replace(/\.js$/, '').includes(path);
       }
     });
 
