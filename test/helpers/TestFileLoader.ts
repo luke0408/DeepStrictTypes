@@ -19,6 +19,10 @@ export namespace TestFileLoader {
       }
     });
 
+    if (options.include && filterFiles.length === 0) {
+      throw new Error(`No files matched the include option: ${options.include.join(', ')}`);
+    }
+
     return filterFiles;
   };
 
