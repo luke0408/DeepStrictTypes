@@ -5,19 +5,29 @@ export namespace TestFileLoader {
   export type FilterOption = { exclude?: string[]; include?: string[] };
 
   const filter = (files: string[], options: FilterOption): string[] => {
-    return files.filter((file) => {
+    const filterFiles = files.filter((file) => {
       if (options.include) return isIncluded();
       if (options.exclude) return !isExcluded();
       return true;
 
       function isExcluded() {
-        return options.exclude?.some((exPath) => file.split(__dirname).at(0)?.includes(exPath));
+        return options.exclude?.some((exPath) => isMatched(exPath));
       }
 
       function isIncluded() {
-        return options.include?.some((incPath) => file.split(__dirname).at(0)?.includes(incPath));
+        return options.include?.some((incPath) => isMatched(incPath));
+      }
+
+      function isMatched(path: string): unknown {
+        return file.split(__dirname).at(0)?.replace(/\.js$/, '').includes(path);
       }
     });
+
+    if (options.include && filterFiles.length === 0) {
+      throw new Error(`No files matched the include option: ${options.include.join(', ')}`);
+    }
+
+    return filterFiles;
   };
 
   const traverse = (dir: string, files: string[]) => {
