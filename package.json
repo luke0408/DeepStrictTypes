@@ -13,7 +13,7 @@
   "types": "bin/src/index.d.ts",
   "scripts": {
     "build": "rimraf bin && tsc",
-    "build:test": "rimraf bin && tsc -p test/tsconfig.json --watch",
+    "build:test": "rimraf bin && tsc -p test/tsconfig.json",
     "prepare": "ts-patch install && typia patch",
     "test": "node bin/test/index.js",
     "prettier": "prettier src --write && prettier test --write"
@@ -47,6 +47,7 @@
   "author": "kakasoo",
   "license": "ISC",
   "devDependencies": {
+    "@nestia/e2e": "^7.3.0",
     "@samchon/shopping-api": "^0.14.1",
     "@types/inquirer": "^9.0.7",
     "@types/node": "^22.10.10",
