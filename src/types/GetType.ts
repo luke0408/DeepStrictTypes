@@ -4,28 +4,50 @@ import type { ElementOf } from './ElementOf';
 import type { RemoveArraySymbol } from './RemoveArraySymbol';
 
 /**
- * @title Type to infer all value types of generic T
+ * Helper type that extracts all value types from an object type.
+ * Similar to `T[keyof T]`, it returns a union of all property value types.
+ *
+ * @internal
+ * @template T - The object type to extract values from
  */
 type ValueOf<T> = T[keyof T];
 
 /**
- * @title The type that pulls out the type of a particular key on an interface.
+ * @title Type for extracting the type at a specific nested path in an object.
  *
- * This type extracts the type of a specific key from a nested object,
+ * This type extracts the type of a specific key from a nested object structure,
  * supporting arrays and deeply nested keys. It uses `DeepStrictObjectKeys`
- * to handle the extraction of keys and correctly resolves the type for the given key.
+ * to validate the key path and correctly resolves the type for the given key.
  *
- * - If the key points to a primitive value, the type is returned directly.
- * - If the key points to an array, the type of the array elements is resolved.
- * - It supports nested keys using `.` notation to handle deep objects and arrays.
+ * Key features:
+ * - Supports dot notation for nested object access (e.g., "a.b.c")
+ * - Handles array access with `[*]` notation (e.g., "items[*].name")
+ * - Type-safe: only accepts valid key paths as defined by `DeepStrictObjectKeys`
+ * - Recursively resolves nested types through objects and arrays
  *
- * @template T The interface type.
- * @template K The key string, which can represent a nested key path.
+ * @template T - The object type to extract from
+ * @template K - The key path string (must be a valid key from DeepStrictObjectKeys<T>)
+ * @returns The type at the specified path, or `never` if the path is invalid
  *
- * Example usage:
- * ```ts
- * type Example1 = GetType<{ a: { b: { c: number } } }, "a.b">; // { c: number }
- * type Example2 = GetType<{ a: { b: { c: number } } }, "a.b.c">; // number
+ * @example
+ * ```typescript
+ * type Data = {
+ *   user: {
+ *     name: string;
+ *     posts: {
+ *       title: string;
+ *       tags: string[];
+ *     }[];
+ *   };
+ * };
+ *
+ * type UserType = GetType<Data, "user">; // { name: string; posts: {...}[] }
+ * type NameType = GetType<Data, "user.name">; // string
+ * type PostsType = GetType<Data, "user.posts">; // { title: string; tags: string[] }[]
+ * type PostType = GetType<Data, "user.posts[*]">; // { title: string; tags: string[] }
+ * type TitleType = GetType<Data, "user.posts[*].title">; // string
+ * type TagsType = GetType<Data, "user.posts[*].tags">; // string[]
+ * type TagType = GetType<Data, "user.posts[*].tags[*]">; // string
  * ```
  */
 export type GetType<T extends object, K extends DeepStrictObjectKeys<T>> =
