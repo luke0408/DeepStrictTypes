@@ -1,55 +1,73 @@
 import assert, { deepStrictEqual, ok } from 'node:assert';
-import test, { describe } from 'node:test';
 import typia, { tags } from 'typia';
 import { DeepStrictObjectKeys, deepStrictObjectKeys, Equal } from '../../src';
 
-describe('[function] Definition of `deepStrictObjectKeys` function', () => {
-  test('just empty object', () => {
-    const keys = deepStrictObjectKeys({}); // It must be just `[]`.
-    type Answer = Equal<typeof keys, never[]>;
-    ok(typia.random<Answer>());
-  });
+/**
+ * Tests that deepStrictObjectKeys returns empty array for empty object.
+ */
+export function test_functions_deep_strict_object_keys_empty_object() {
+  const keys = deepStrictObjectKeys({}); // It must be just `[]`.
+  type Answer = Equal<typeof keys, never[]>;
+  ok(typia.random<Answer>());
+}
 
-  test('just empty array', () => {
-    const keys = deepStrictObjectKeys([]); // It must be just `[]`.
-    const elements: string[] = [];
-    deepStrictEqual(keys, elements);
-  });
+/**
+ * Tests that deepStrictObjectKeys returns empty array for empty array.
+ */
+export function test_functions_deep_strict_object_keys_empty_array() {
+  const keys = deepStrictObjectKeys([]); // It must be just `[]`.
+  const elements: string[] = [];
+  deepStrictEqual(keys, elements);
+}
 
-  test('just empty readonly array', () => {
-    const keys = deepStrictObjectKeys([] as const); // It must be just `[]`.
-    const elements: string[] = [];
-    deepStrictEqual(keys, elements);
-  });
+/**
+ * Tests that deepStrictObjectKeys returns empty array for empty readonly array.
+ */
+export function test_functions_deep_strict_object_keys_empty_readonly_array() {
+  const keys = deepStrictObjectKeys([] as const); // It must be just `[]`.
+  const elements: string[] = [];
+  deepStrictEqual(keys, elements);
+}
 
-  test('array in object with `as const`', () => {
-    const keys = deepStrictObjectKeys({ a: [1] } as const); // It must be just `['a', 'a.0']`.
-    const elements = ['a', 'a.0'];
+/**
+ * Tests that deepStrictObjectKeys correctly handles array in object with const assertion.
+ */
+export function test_functions_deep_strict_object_keys_array_in_object_const() {
+  const keys = deepStrictObjectKeys({ a: [1] } as const); // It must be just `['a', 'a.0']`.
+  const elements = ['a', 'a.0'];
 
-    assert(typia.misc.literals<(typeof keys)[number]>().length === elements.length);
-    deepStrictEqual(keys, elements);
-  });
+  assert(typia.misc.literals<(typeof keys)[number]>().length === elements.length);
+  deepStrictEqual(keys, elements);
+}
 
-  test('', () => {
-    const target = { a: [] } as const;
-    const keys = deepStrictObjectKeys(target); // ['a']
-    const elements = ['a'];
+/**
+ * Tests that deepStrictObjectKeys correctly handles object with empty array property.
+ */
+export function test_functions_deep_strict_object_keys_object_empty_array_property() {
+  const target = { a: [] } as const;
+  const keys = deepStrictObjectKeys(target); // ['a']
+  const elements = ['a'];
 
-    assert(typia.misc.literals<(typeof keys)[number]>().length === elements.length);
-    deepStrictEqual(keys, elements);
-  });
+  assert(typia.misc.literals<(typeof keys)[number]>().length === elements.length);
+  deepStrictEqual(keys, elements);
+}
 
-  test('', () => {
-    const target = { a: [1, 2, 3, 4] } as const;
-    const keys = deepStrictObjectKeys(target);
-    const elements = ['a', 'a.0', 'a.1', 'a.2', 'a.3'];
+/**
+ * Tests that deepStrictObjectKeys correctly handles object with multi-element array.
+ */
+export function test_functions_deep_strict_object_keys_object_multi_element_array() {
+  const target = { a: [1, 2, 3, 4] } as const;
+  const keys = deepStrictObjectKeys(target);
+  const elements = ['a', 'a.0', 'a.1', 'a.2', 'a.3'];
 
-    assert(typia.misc.literals<(typeof keys)[number]>().length === elements.length);
-    deepStrictEqual(keys, elements);
-  });
-});
+  assert(typia.misc.literals<(typeof keys)[number]>().length === elements.length);
+  deepStrictEqual(keys, elements);
+}
 
-test('[function] [deepStrictObjectKeys] Date props', () => {
+/**
+ * Tests that deepStrictObjectKeys correctly handles Date properties.
+ */
+export function test_functions_deep_strict_object_keys_date_props() {
   interface Target {
     prop: Date;
     other: number;
@@ -61,9 +79,12 @@ test('[function] [deepStrictObjectKeys] Date props', () => {
   for (const key of keys) {
     ok(elements.includes(key), `${key} is not in ${JSON.stringify(elements)}`);
   }
-});
+}
 
-test('[function] [deepStrictObjectKeys] union with Date and string', () => {
+/**
+ * Tests that deepStrictObjectKeys correctly handles union with Date and string.
+ */
+export function test_functions_deep_strict_object_keys_union_date_string() {
   interface Target {
     prop: Date | string;
     other: number;
@@ -75,9 +96,12 @@ test('[function] [deepStrictObjectKeys] union with Date and string', () => {
   for (const key of keys) {
     ok(elements.includes(key), `${key} is not in ${JSON.stringify(elements)}`);
   }
-});
+}
 
-test('[function] [deepStrictObjectKeys] branding type of string (typia)', () => {
+/**
+ * Tests that deepStrictObjectKeys correctly handles branding type of string (typia).
+ */
+export function test_functions_deep_strict_object_keys_branding_string_typia() {
   interface Target {
     prop: string & tags.Format<'date-time'>;
     other: number;
@@ -89,9 +113,12 @@ test('[function] [deepStrictObjectKeys] branding type of string (typia)', () => 
   for (const key of keys) {
     ok(elements.includes(key), `${key} is not in ${JSON.stringify(elements)}`);
   }
-});
+}
 
-test('[function] [deepStrictObjectKeys] branding type of string', () => {
+/**
+ * Tests that deepStrictObjectKeys correctly handles branding type of number.
+ */
+export function test_functions_deep_strict_object_keys_branding_number() {
   interface Target {
     prop: number & { unit: 'dollar' | 'won' };
     other: number;
@@ -103,9 +130,12 @@ test('[function] [deepStrictObjectKeys] branding type of string', () => {
   for (const key of keys) {
     ok(elements.includes(key), `${key} is not in ${JSON.stringify(elements)}`);
   }
-});
+}
 
-test('[function] [deepStrictObjectKeys] primitive type and object type / apply conservative type reasoning', () => {
+/**
+ * Tests that deepStrictObjectKeys applies conservative type reasoning for primitive and object union.
+ */
+export function test_functions_deep_strict_object_keys_primitive_object_union() {
   interface Target {
     prop: number | { value: number; unit: 'dollar' | 'won' };
     other: number;
@@ -117,9 +147,12 @@ test('[function] [deepStrictObjectKeys] primitive type and object type / apply c
   for (const key of keys) {
     ok(elements.includes(key), `${key} is not in ${JSON.stringify(elements)}`);
   }
-});
+}
 
-test('[function] [deepStrictObjectKeys] primitive type and array type / apply conservative type reasoning', () => {
+/**
+ * Tests that deepStrictObjectKeys applies conservative type reasoning for primitive and array union.
+ */
+export function test_functions_deep_strict_object_keys_primitive_array_union() {
   interface Target {
     prop: number | Array<{ value: number; unit: 'dollar' | 'won' }>;
     other: number;
@@ -131,9 +164,12 @@ test('[function] [deepStrictObjectKeys] primitive type and array type / apply co
     const result = typia.is<'prop' | 'other' | `prop.${number}` | `prop.${number}.value` | `prop.${number}.unit`>(key);
     ok(result, `actual: ${key}`);
   }
-});
+}
 
-test('[function] [deepStrictObjectKeys] union type with object and array / apply conservative type reasoning', () => {
+/**
+ * Tests that deepStrictObjectKeys applies conservative type reasoning for object and array union.
+ */
+export function test_functions_deep_strict_object_keys_object_array_union() {
   interface Target {
     prop: { value: number; unit: 'dollar' | 'won' } | Array<{ value: number; unit: 'dollar' | 'won' }>;
     other: number;
@@ -147,9 +183,12 @@ test('[function] [deepStrictObjectKeys] union type with object and array / apply
     >(key);
     ok(result, `actual: ${key}`);
   }
-});
+}
 
-test('[function] [deepStrictObjectKeys] nested object with 2 depth', () => {
+/**
+ * Tests that deepStrictObjectKeys correctly handles nested object with 2 depth.
+ */
+export function test_functions_deep_strict_object_keys_nested_object_2_depth() {
   interface Target {
     prop: { value: number; unit: 'dollar' | 'won' };
     other: number;
@@ -161,9 +200,12 @@ test('[function] [deepStrictObjectKeys] nested object with 2 depth', () => {
   for (const key of keys) {
     ok(elements.includes(key), `${key} is not in ${JSON.stringify(elements)}`);
   }
-});
+}
 
-test('[function] [deepStrictObjectKeys] nested object with 3 depth', () => {
+/**
+ * Tests that deepStrictObjectKeys correctly handles nested object with 3 depth.
+ */
+export function test_functions_deep_strict_object_keys_nested_object_3_depth() {
   interface Target {
     prop: {
       value: number;
@@ -182,9 +224,12 @@ test('[function] [deepStrictObjectKeys] nested object with 3 depth', () => {
   for (const key of keys) {
     ok(elements.includes(key), `${key} is not in ${JSON.stringify(elements)}`);
   }
-});
+}
 
-test('[function] [deepStrictObjectKeys] array property', () => {
+/**
+ * Tests that deepStrictObjectKeys correctly handles array property.
+ */
+export function test_functions_deep_strict_object_keys_array_property() {
   interface Target {
     prop: number[];
     other: number;
@@ -195,9 +240,12 @@ test('[function] [deepStrictObjectKeys] array property', () => {
     const result = typia.is<'prop' | 'other' | `prop.${number}`>(key);
     ok(result);
   }
-});
+}
 
-test('[function] [deepStrictObjectKeys] union array property', () => {
+/**
+ * Tests that deepStrictObjectKeys correctly handles union array property.
+ */
+export function test_functions_deep_strict_object_keys_union_array_property() {
   interface Target {
     prop: (number | string)[];
     other: number;
@@ -208,9 +256,12 @@ test('[function] [deepStrictObjectKeys] union array property', () => {
     const result = typia.is<'prop' | 'other' | `prop.${number}`>(key);
     ok(result);
   }
-});
+}
 
-test('[function] 1. [deepStrictObjectKeys] array of branding type of string property', () => {
+/**
+ * Tests that deepStrictObjectKeys correctly handles array of branding type of string property.
+ */
+export function test_functions_deep_strict_object_keys_array_branding_string() {
   interface Target {
     prop: (string & { unit: 'dollar' | 'won' })[];
     other: number;
@@ -221,9 +272,12 @@ test('[function] 1. [deepStrictObjectKeys] array of branding type of string prop
     const result = typia.is<'prop' | 'other' | `prop.${number}`>(key);
     ok(result, `actual: ${key}`);
   }
-});
+}
 
-test('[function] 2. [deepStrictObjectKeys] array of branding type of string property (typia)', () => {
+/**
+ * Tests that deepStrictObjectKeys correctly handles array of branding type string with typia tags.
+ */
+export function test_functions_deep_strict_object_keys_array_branding_string_typia() {
   interface Target {
     prop: (string & tags.Format<'uuid'>)[];
     other: number;
@@ -235,9 +289,12 @@ test('[function] 2. [deepStrictObjectKeys] array of branding type of string prop
     const result = typia.is<'prop' | 'other' | `prop.${number}` | `prop.${number}.value` | `prop.${number}.unit`>(key);
     ok(result);
   }
-});
+}
 
-test('[function] 3. [deepStrictObjectKeys] array of branding type of string property', () => {
+/**
+ * Tests that deepStrictObjectKeys correctly handles array of object with branding properties.
+ */
+export function test_functions_deep_strict_object_keys_array_object_branding() {
   interface Target {
     prop: { value: number; unit: 'dollar' | 'won' }[];
     other: number;
@@ -249,9 +306,12 @@ test('[function] 3. [deepStrictObjectKeys] array of branding type of string prop
     const result = typia.is<'prop' | 'other' | `prop.${number}` | `prop.${number}.value` | `prop.${number}.unit`>(key);
     ok(result);
   }
-});
+}
 
-test('[function] [deepStrictObjectKeys] key in an array', () => {
+/**
+ * Tests that deepStrictObjectKeys correctly handles keys in an array.
+ */
+export function test_functions_deep_strict_object_keys_in_array() {
   type Target = {
     prop: { value: number; unit: 'dollar' | 'won' }[];
     other: number;
@@ -270,9 +330,12 @@ test('[function] [deepStrictObjectKeys] key in an array', () => {
     >(key);
     ok(result);
   }
-});
+}
 
-test('[function] 1. [deepStrictObjectKeys] a key in a two-dimensional array', () => {
+/**
+ * Tests that deepStrictObjectKeys correctly handles keys in a two-dimensional array.
+ */
+export function test_functions_deep_strict_object_keys_in_2d_array() {
   type Target = {
     prop: { value: number; unit: 'dollar' | 'won' }[];
     other: number;
@@ -292,9 +355,12 @@ test('[function] 1. [deepStrictObjectKeys] a key in a two-dimensional array', ()
     >(key);
     ok(result, `actual: ${key}`);
   }
-});
+}
 
-test('[function] 2. [deepStrictObjectKeys] a key in a two-dimensional array', () => {
+/**
+ * Tests that deepStrictObjectKeys correctly handles simple keys in a two-dimensional array.
+ */
+export function test_functions_deep_strict_object_keys_simple_in_2d_array() {
   type Target = { a: 1 }[][];
   const target = typia.random<Target>();
 
@@ -303,17 +369,23 @@ test('[function] 2. [deepStrictObjectKeys] a key in a two-dimensional array', ()
     const result = typia.is<`${number}` | `${number}.${number}` | `${number}.${number}.a`>(key);
     ok(result);
   }
-});
+}
 
-test('[function] 1. array and `as const`', () => {
+/**
+ * Tests that deepStrictObjectKeys correctly handles empty array with const assertion.
+ */
+export function test_functions_deep_strict_object_keys_empty_array_const() {
   const keys = deepStrictObjectKeys([] as const);
   deepStrictEqual(keys, []);
-});
+}
 
-test('[function] 2. array and `as const`', () => {
+/**
+ * Tests that deepStrictObjectKeys correctly handles non-empty array with const assertion.
+ */
+export function test_functions_deep_strict_object_keys_array_const() {
   const keys = deepStrictObjectKeys([1] as const);
   for (const key of keys) {
     const result = typia.is<`${number}`>(key);
     ok(result);
   }
-});
+}
